@@ -13,18 +13,35 @@ router.post('/video', async (req, res) => {
     }
 })
 
-
-router.get('/video',async (req, res)=>{
-    const name = req.query.name
+router.get('/video', async (req, res) => {
     try {
-        const video = await Video.findOne({name})
-        if(!video)
-          return res.status(404).send()
+        const videos = await Video.find(req.query)
 
-        res.status(200).send(video)
+        if (!videos)
+            return res.status(404).send()
+
+        res.status(200).send(videos)
     } catch (error) {
         res.status(500).send(error)
     }
 })
+
+
+router.delete('/video', async (req, res) => {
+    const name = req.query.name
+    try {
+        const video = await Video.findOneAndDelete({ name })
+        if (!video)
+            res.status(404).send()
+        res.status(200).send(video)
+    } catch (error) {
+        res.status(500).send()
+    }
+})
+
+
+
+
+
 
 module.exports = router
