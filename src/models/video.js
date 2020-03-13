@@ -8,6 +8,10 @@ const videoSchema = new mongoose.Schema({
         trim:true,
         
     },
+    source:{
+        type:String,
+        default:'external'
+    },
     url:{
         type:String,
         trim:true,
@@ -18,15 +22,16 @@ const videoSchema = new mongoose.Schema({
             }
         }
     },
-    description:{
-        type:String,
-        required:false,
-        trim:false
+    owner:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:'Subcategory'
     }
-
 },{
     timestamps:true
 })
+
+
 
 const Video = mongoose.model('Video',videoSchema)
 

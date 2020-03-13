@@ -1,10 +1,15 @@
 const express = require('express')
 const Video = require('../models/video')
 
+import authSubcategory from '../middleware/authSubcategory'
+
 const router = new express.Router()
 
-router.post('/video', async (req, res) => {
-    const video = new Video(req.body)
+router.post('/video', authSubcategory, async (req, res) => {
+    const video = new Video({ 
+        ...req.body,
+        owner: req.subcategory._id
+    })
     try {
         await video.save()
         res.status(201).send(video)
