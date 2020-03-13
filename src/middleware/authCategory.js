@@ -1,8 +1,8 @@
-import Category from '../models/category'
+const Category = require('../models/category')
 
 const authCategory = async (req,res,next) =>{
     try {
-        const categoryId = req.header('Authorization').replace('Basic ', '')
+        const categoryId = req.header('Category')
         const category = await Category.findOne({_id:categoryId})
         if(!category)
           throw new Error()
@@ -14,4 +14,4 @@ const authCategory = async (req,res,next) =>{
     }
 }
 
-export default authCategory
+module.exports = authCategory

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 
 const categorySchema = new mongoose.Schema({
     name:{
@@ -15,4 +15,4 @@ categorySchema.virtual('subcategories',{
 })
 
 const Category = new mongoose.model('Category',categorySchema)
-export default Category
+module.exports = Category

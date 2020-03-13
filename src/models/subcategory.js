@@ -1,8 +1,7 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 
 const subcategorySchema = new mongoose.Schema({
     name:{
-        required:true,
         color:{
             type:String,
             default:undefined
@@ -18,7 +17,7 @@ const subcategorySchema = new mongoose.Schema({
     },
     description:{
         type:String,
-        required:true
+        required:false
     },
     gallery:[{
         photo:{
@@ -39,4 +38,4 @@ subcategorySchema.virtual('videos',{
 })
 
 const Subcategory = new mongoose.model('Subcategory', subcategorySchema)
-export default Subcategory
+module.exports =  Subcategory

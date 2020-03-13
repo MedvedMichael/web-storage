@@ -1,4 +1,4 @@
-import Subcategory from '../models/subcategory.js'
+const Subcategory = require('../models/subcategory.js')
 
 const authSubcategory = async (req,res,next) =>{
     try {
@@ -14,4 +14,4 @@ const authSubcategory = async (req,res,next) =>{
     }
 }
 
-export default authSubcategory
+module.exports = authSubcategory

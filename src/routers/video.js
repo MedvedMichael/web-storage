@@ -1,7 +1,7 @@
 const express = require('express')
 const Video = require('../models/video')
 
-import authSubcategory from '../middleware/authSubcategory'
+const authSubcategory  = require('../middleware/authSubcategory')
 
 const router = new express.Router()
 

@@ -1,5 +1,5 @@
-import { Router } from 'express'
-import Category from '../models/category'
+const { Router } = require('express')
+const Category = require('../models/category')
 
 const router = new Router()
 
@@ -9,7 +9,7 @@ router.post('/categories', async (req, res) => {
 
     try {
         await category.save()
-        res.status(201).send()
+        res.status(201).send(category)
     } catch (error) {
         res.status(400).send()
     }
@@ -34,13 +34,24 @@ router.patch('/categories/:id', async (req, res) => {
             return res.status(404).send()
         updates.forEach((update) => { category[update] = req.body[update] })
         await category.save()
-
+        res.status(200).send(category)
     } catch (error) {
         res.status(400).send()
     }
 })
 
-router.get('/categories', async (req,res)=>{
+router.get('/categories/:id', async (req, res) => {
+    try {
+        const category = await Category.findOne({ _id: req.params.id })
+        res.status(200).send(category)
+    } catch (error) {
+        res.status(500).send()
+    }
+})
+
+
+
+router.get('/categories', async (req, res) => {
     try {
         const categories = await Category.find(req.body)
         res.status(200).send(categories)
@@ -50,4 +61,4 @@ router.get('/categories', async (req,res)=>{
 })
 
 
-export default router
+module.exports = router
