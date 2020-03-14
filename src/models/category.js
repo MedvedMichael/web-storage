@@ -6,6 +6,11 @@ const categorySchema = new mongoose.Schema({
         unique:true,
         required:true,
         trim:true
+    },
+    isPublished:{
+        type:Boolean,
+        required:true,
+        default:false
     }
 })
 

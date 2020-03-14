@@ -1,12 +1,12 @@
 const { Router } = require('express')
 const Category = require('../models/category')
-
+const authUser = require('../middleware/authUser')
+const authAdmin = require('../middleware/authAdmin')
 const router = new Router()
 
 
-router.post('/categories', async (req, res) => {
+router.post('/categories', authUser, authAdmin, async (req, res) => {
     const category = new Category(req.body)
-
     try {
         await category.save()
         res.status(201).send(category)
@@ -16,7 +16,7 @@ router.post('/categories', async (req, res) => {
 })
 
 
-router.patch('/categories/:id', async (req, res) => {
+router.patch('/categories/:id', authUser, authAdmin, async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name']
 
@@ -40,20 +40,18 @@ router.patch('/categories/:id', async (req, res) => {
     }
 })
 
-router.get('/categories/:id', async (req, res) => {
-    try {
-        const category = await Category.findOne({ _id: req.params.id })
-        res.status(200).send(category)
-    } catch (error) {
-        res.status(500).send()
-    }
-})
-
-
+// router.get('/categories/:id', async (req, res) => {
+//     try {
+//         const category = await Category.findOne({ _id: req.params.id, isPublished: true })
+//         res.status(200).send(category)
+//     } catch (error) {
+//         res.status(500).send()
+//     }
+// })
 
 router.get('/categories', async (req, res) => {
     try {
-        const categories = await Category.find(req.body)
+        const categories = await Category.find({ ...req.body, isPublished: true })
         res.status(200).send(categories)
     } catch (error) {
         res.status(500).send()

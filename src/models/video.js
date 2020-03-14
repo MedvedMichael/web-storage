@@ -17,6 +17,7 @@ const videoSchema = new mongoose.Schema({
         type:String,
         trim:true,
         required:true,
+        unique:true,
         validate(value){
             if(!validator.isURL(value)){
                 throw new Error('Your url is not valid!')

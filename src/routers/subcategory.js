@@ -1,10 +1,11 @@
 const { Router } = require('express')
 const Subcategory = require('../models/subcategory')
 const authCategory = require('../middleware/authCategory')
-
+const authUser = require('../middleware/authUser')
+const authAdmin = require('../middleware/authAdmin')
 const router = new Router()
 
-router.post('/subcategories', authCategory, async (req, res) => {
+router.post('/subcategories',authUser, authAdmin, authCategory, async (req, res) => {
     const subcategory = new Subcategory({
         ...req.body,
         owner: req.category._id
@@ -39,9 +40,9 @@ router.get('/subcategories', authCategory, async (req, res) => {
 })
 
 
-router.patch('/subcategories/:id', authCategory, async (req, res) => {
+router.patch('/subcategories/:id', authUser, authAdmin, authCategory, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name', 'description']
+    const allowedUpdates = ['name','isPublished', 'description']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
     if (!isValidOperation) {
         return res.status(400).send({ error: 'Invalid updates' })

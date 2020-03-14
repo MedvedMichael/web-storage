@@ -9,6 +9,11 @@ const subcategorySchema = new mongoose.Schema({
         type:String,
         required:false
     },
+    isPublished:{
+        type:Boolean,
+        required:true,
+        default:false
+    },
     owner:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,

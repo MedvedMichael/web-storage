@@ -2,6 +2,7 @@ const { Router } = require('express')
 
 const User = require('../models/user')
 const authUser = require('../middleware/authUser')
+const authAdmin = require('../middleware/authAdmin')
 const router = Router()
 
 router.post('/users', async (req, res) => {
@@ -69,10 +70,8 @@ router.patch('/users/me', async (req, res) => {
 })
 
 //only for admins
-router.patch('/users/:id', authUser, async (req, res) => {
-    if (req.user.status !== 'admin')
-        return res.status(401).send('You\'re not an admin')
-
+router.patch('/users/:id', authUser, authAdmin, async (req, res) => {
+    
     const user = await User.findOne({ _id: req.params.id })
     if (!user)
         return res.status(404).send()

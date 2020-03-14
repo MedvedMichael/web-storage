@@ -3,7 +3,7 @@ const Category = require('../models/category')
 const authCategory = async (req,res,next) =>{
     try {
         const categoryId = req.header('Category')
-        const category = await Category.findOne({_id:categoryId})
+        const category = await Category.findOne({ _id: categoryId})
         if(!category)
           throw new Error()
 

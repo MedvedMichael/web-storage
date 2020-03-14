@@ -2,7 +2,7 @@ const Subcategory = require('../models/subcategory.js')
 
 const authSubcategory = async (req,res,next) =>{
     try {
-        const subcategoryId = req.header('Authorization').replace('Basic ', '')
+        const subcategoryId = req.header('Subcategory')
         const subcategory = await Subcategory.findOne({_id:subcategoryId})
         if(!subcategory)
           throw new Error()
