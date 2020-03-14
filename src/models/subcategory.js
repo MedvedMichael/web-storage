@@ -2,28 +2,13 @@ const mongoose = require('mongoose')
 
 const subcategorySchema = new mongoose.Schema({
     name:{
-        color:{
-            type:String,
-            default:undefined
-        },
-        number:{
-            type:Number,
-            default:undefined
-        },
-        text:{
-            type:String,
-            default:undefined
-        }
+        type:Object,
+        unique:true
     },
     description:{
         type:String,
         required:false
     },
-    gallery:[{
-        photo:{
-            type:Buffer
-        }
-    }],
     owner:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,

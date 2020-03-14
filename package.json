@@ -2,21 +2,24 @@
   "name": "web-storage",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "env-cmd ./config/dev.env node src/index.js"
+    "dev": "env-cmd ./config/dev.env nodemon src/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^4.0.1",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.9",
     "validator": "^12.2.0"
   },
   "devDependencies": {
-    "env-cmd": "^8.0.2"
+    "env-cmd": "^8.0.2",
+    "nodemon": "^2.0.2"
   }
 }
