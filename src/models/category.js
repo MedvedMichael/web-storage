@@ -7,6 +7,10 @@ const categorySchema = new mongoose.Schema({
         required:true,
         trim:true
     },
+    subcategoriesType:{
+        type:String,
+        required:false
+    },
     isPublished:{
         type:Boolean,
         required:true,

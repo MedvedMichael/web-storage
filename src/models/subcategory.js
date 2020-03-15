@@ -1,10 +1,16 @@
 const mongoose = require('mongoose')
 
 const subcategorySchema = new mongoose.Schema({
+    type:{
+        type:String,
+        required:true
+    },
     name:{
-        type:Object,
+        type: (this.type == 'number') ? Number : String,
+        required:true,
         unique:true
     },
+    
     description:{
         type:String,
         required:false

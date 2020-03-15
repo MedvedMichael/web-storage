@@ -2,7 +2,7 @@ const Subcategory = require('../models/subcategory.js')
 
 const authSubcategory = async (req,res,next) =>{
     try {
-        const subcategoryId = req.header('Subcategory')
+        const subcategoryId = req.query.subcategoryId
         const subcategory = await Subcategory.findOne({_id:subcategoryId})
         if(!subcategory)
           throw new Error()
@@ -10,7 +10,7 @@ const authSubcategory = async (req,res,next) =>{
         req.subcategory = subcategory
         next()
     } catch (error) {
-        res.status(401).send()
+        res.status(400).send()
     }
 }
 

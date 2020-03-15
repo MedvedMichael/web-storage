@@ -51,10 +51,19 @@ router.patch('/categories/:id', authUser, authAdmin, async (req, res) => {
 
 router.get('/categories', async (req, res) => {
     try {
-        const categories = await Category.find({ ...req.body, isPublished: true })
+        const categories = await Category.find({ isPublished: true })
         res.status(200).send(categories)
     } catch (error) {
         res.status(500).send()
+    }
+})
+
+router.get('/categoriesall', authUser, authAdmin, async (req,res)=>{
+    try {
+        const categories = await Category.find({})
+        res.status(200).send(categories)
+    } catch (error) {
+        res.status(500).send()   
     }
 })
 

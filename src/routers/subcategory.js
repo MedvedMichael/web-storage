@@ -10,7 +10,17 @@ router.post('/subcategories',authUser, authAdmin, authCategory, async (req, res)
         ...req.body,
         owner: req.category._id
     })
+
     try {
+        const testSubcategory = await Subcategory.findOne({})
+        if(testSubcategory && testSubcategory.type !== subcategory.type)
+            return res.status(400).send(`Wrong type of subcategory, needs ${testSubcategory.type}`)
+        
+        if(!testSubcategory){
+            req.category.subcategoriesType = subcategory.type
+            await req.category.save()
+        }
+
         await subcategory.save()
         res.status(201).send(subcategory)
     } catch (error) {
@@ -40,7 +50,7 @@ router.get('/subcategories', authCategory, async (req, res) => {
 })
 
 
-router.patch('/subcategories/:id', authUser, authAdmin, authCategory, async (req, res) => {
+router.patch('/subcategories', authUser, authAdmin, authCategory, async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name','isPublished', 'description']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -49,8 +59,9 @@ router.patch('/subcategories/:id', authUser, authAdmin, authCategory, async (req
     }
 
     try {
+        
         const subcategory = await Subcategory.findOne({
-            _id: req.params.id,
+            _id: req.query.id,
             owner: req.category._id
         })
 
