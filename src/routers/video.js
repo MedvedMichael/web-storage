@@ -42,6 +42,15 @@ router.delete('/video', authUser, authAdmin, async (req, res) => {
     }
 })
 
+router.get('/videosall', authUser, authAdmin, async (req,res)=>{
+    try {
+        const videos = await Video.find({})
+        res.status(200).send(videos)
+    } catch (error) {
+        res.status(500).send()
+    }
+})
+
 
 
 

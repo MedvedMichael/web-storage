@@ -21,11 +21,25 @@ router.post('/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
+        refreshTokens(user)
+        await user.save()
         res.status(200).send({ user, token })
     } catch (error) {
         res.status(400).send(error)
     }
 })
+
+const refreshTokens = (user) => {
+    const jwt = require('jsonwebtoken')
+    user.tokens = user.tokens.filter((token) => {
+        try {
+            jwt.verify(token.token, process.env.JWT_SECRET)
+            return true
+        } catch (error) {
+            return false
+        }
+    })
+}
 
 router.post('/users/logout', authUser, async (req, res) => {
     try {
@@ -64,9 +78,9 @@ router.get('/usersall',authUser,authAdmin, async (req,res)=>{
 })
 
 
-router.patch('/users/me', async (req, res) => {
+router.patch('/users/me', authUser, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name', 'email', 'password']
+    const allowedUpdates = ['name', 'nickname', 'password']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
     if (!isValidOperation) {
         return res.status(400).send({ error: 'Invalid updates' })
@@ -74,6 +88,9 @@ router.patch('/users/me', async (req, res) => {
 
     try {
         updates.forEach((update) => req.user[update] = req.body[update])
+        if(updates.includes('password'))
+            req.user.tokens = req.user.tokens.filter(token => token.token === req.token)
+        
         await req.user.save()
         res.status(200).send(req.user)
     } catch (error) {
@@ -82,9 +99,9 @@ router.patch('/users/me', async (req, res) => {
 })
 
 //only for admins
-router.patch('/users/:id', authUser, authAdmin, async (req, res) => {
+router.patch('/users', authUser, authAdmin, async (req, res) => {
     
-    const user = await User.findOne({ _id: req.params.id })
+    const user = await User.findOne({ _id: req.query.id })
     if (!user)
         return res.status(404).send()
 

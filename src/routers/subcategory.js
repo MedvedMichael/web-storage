@@ -52,7 +52,7 @@ router.get('/subcategories', authCategory, async (req, res) => {
 
 router.patch('/subcategories', authUser, authAdmin, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name','isPublished', 'description']
+    const allowedUpdates = ['name', 'subtitle','isPublished', 'description']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
     if (!isValidOperation) {
         return res.status(400).send({ error: 'Invalid updates' })
