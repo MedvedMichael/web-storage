@@ -30,8 +30,8 @@ router.get('/video', authSubcategory, async (req, res) => {
 })
 
 
-router.delete('/video', authUser, authAdmin, authSubcategory, async (req, res) => {
-    const id = req.body.id
+router.delete('/video', authUser, authAdmin, async (req, res) => {
+    const id = req.query.id
     try {
         const video = await Video.findOneAndDelete({ _id: id })
         if (!video)

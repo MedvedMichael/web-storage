@@ -16,9 +16,9 @@ router.post('/categories', authUser, authAdmin, async (req, res) => {
 })
 
 
-router.patch('/categories/:id', authUser, authAdmin, async (req, res) => {
+router.patch('/categories', authUser, authAdmin, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name']
+    const allowedUpdates = ['name','isPublished']
 
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
     if (!isValidOperation) {
@@ -27,7 +27,7 @@ router.patch('/categories/:id', authUser, authAdmin, async (req, res) => {
 
     try {
         const category = await Category.findOne({
-            _id: req.params.id
+            _id: req.query.id
         })
 
         if (!category)

@@ -50,7 +50,7 @@ router.get('/subcategories', authCategory, async (req, res) => {
 })
 
 
-router.patch('/subcategories', authUser, authAdmin, authCategory, async (req, res) => {
+router.patch('/subcategories', authUser, authAdmin, async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name','isPublished', 'description']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -59,14 +59,13 @@ router.patch('/subcategories', authUser, authAdmin, authCategory, async (req, re
     }
 
     try {
-        
         const subcategory = await Subcategory.findOne({
-            _id: req.query.id,
-            owner: req.category._id
+            _id: req.query.id
         })
 
         if (!subcategory)
             return res.status(404).send()
+
         updates.forEach((update) => subcategory[update] = req.body[update])
         await subcategory.save()
 
