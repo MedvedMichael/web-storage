@@ -1,11 +1,12 @@
 const { Router } = require('express')
 const Category = require('../models/category')
 const authUser = require('../middleware/authUser')
-const authAdmin = require('../middleware/authAdmin')
+//const authAdmin = require('../middleware/authAdmin')
+const authMainAdmin = require('../middleware/authMainAdmin')
 const router = new Router()
 
 
-router.post('/categories', authUser, authAdmin, async (req, res) => {
+router.post('/categories', authUser, authMainAdmin, async (req, res) => {
     const category = new Category(req.body)
     try {
         await category.save()
@@ -16,7 +17,7 @@ router.post('/categories', authUser, authAdmin, async (req, res) => {
 })
 
 
-router.patch('/categories', authUser, authAdmin, async (req, res) => {
+router.patch('/categories', authUser, authMainAdmin, async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name','isPublished']
 
@@ -58,7 +59,7 @@ router.get('/categories', async (req, res) => {
     }
 })
 
-router.get('/categoriesall', authUser, authAdmin, async (req,res)=>{
+router.get('/categoriesall', authUser, authMainAdmin, async (req,res)=>{
     try {
         const categories = await Category.find({})
         res.status(200).send(categories)

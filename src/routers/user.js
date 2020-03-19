@@ -2,7 +2,8 @@ const { Router } = require('express')
 
 const User = require('../models/user')
 const authUser = require('../middleware/authUser')
-const authAdmin = require('../middleware/authAdmin')
+// const authAdmin = require('../middleware/authAdmin')
+const authMainAdmin = require('../middleware/authMainAdmin')
 const router = Router()
 
 router.post('/users', async (req, res) => {
@@ -65,7 +66,7 @@ router.get('/users/me', authUser, async (req, res) => {
     res.send(req.user)
 })
 
-router.get('/usersall',authUser,authAdmin, async (req,res)=>{
+router.get('/usersall',authUser,authMainAdmin, async (req,res)=>{
     try {
         const users = await User.find({})
         if(!users)
@@ -98,8 +99,8 @@ router.patch('/users/me', authUser, async (req, res) => {
     }
 })
 
-//only for admins
-router.patch('/users', authUser, authAdmin, async (req, res) => {
+//only for main admins
+router.patch('/users', authUser,authMainAdmin, async (req, res) => {
     
     const user = await User.findOne({ _id: req.query.id })
     if (!user)
@@ -109,6 +110,7 @@ router.patch('/users', authUser, authAdmin, async (req, res) => {
         return res.status(400).send()
     
     user.status = req.body.status
+    user.ban = req.body.ban
     try {
         await user.save()
         res.status(200).send(user)
