@@ -28,11 +28,15 @@ const subcategorySchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         required:true,
         ref:'Category'
+    },
+    categoryName:{
+        type: String,
+        required: true
     }
 })
 
-subcategorySchema.virtual('videos',{
-    ref:'Video',
+subcategorySchema.virtual('videosets',{
+    ref:'Videoset',
     localField:'_id',
     foreignField:'owner'
 })

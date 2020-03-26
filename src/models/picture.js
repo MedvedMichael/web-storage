@@ -1,14 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 
-const videoSchema = new mongoose.Schema({
-    name:{
-        type:String,
-        unique:true,
-        required:true,
-        trim:true,
-        
-    },
+const pictureSchema = new mongoose.Schema({
     source:{
         type:String,
         default:'external'
@@ -35,6 +28,6 @@ const videoSchema = new mongoose.Schema({
 
 
 
-const Video = mongoose.model('Video',videoSchema)
+const Picture = mongoose.model('Picture',pictureSchema)
 
-module.exports = Video
+module.exports = Picture
