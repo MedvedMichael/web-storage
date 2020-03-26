@@ -58,6 +58,18 @@ router.get('/categories', async (req, res) => {
     }
 })
 
+router.get('/categories/:id', async (req,res)=>{
+    try{
+        // console.log(req.params)
+        const category = await Category.findOne({_id:req.params.id})
+        if(!category)
+         res.sendStatus(404)
+        res.status(200).send(category)
+    } catch(error){
+        res.status(500).send()
+    }
+})
+
 router.get('/categoriesall', authUser, authAdmin, async (req,res)=>{
     try {
         const categories = await Category.find({})
