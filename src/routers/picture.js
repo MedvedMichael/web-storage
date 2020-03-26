@@ -1,15 +1,15 @@
 const express = require('express')
 const Picture = require('../models/picture')
-const authSubcategory  = require('../middleware/authSubcategory')
+//const authSubcategory  = require('../middleware/authSubcategory')
 const authUser = require('../middleware/authUser')
 const authAdmin = require('../middleware/authAdmin')
-//const authMainAdmin = require('../middleware/authMainAdmin')
+const authVideoset = require('../middleware/authVideoset')
 const router = new express.Router()
 
-router.post('/picture', authUser, authAdmin, authSubcategory, async (req, res) => {
+router.post('/picture', authUser, authAdmin, authVideoset, async (req, res) => {
     const picture = new Picture({
         ...req.body,
-        owner: req.subcategory._id
+        owner: req.videoset._id
     })
     try {
         await picture.save()
@@ -19,12 +19,12 @@ router.post('/picture', authUser, authAdmin, authSubcategory, async (req, res) =
     }
 })
 
-router.get('/picture', authSubcategory, async (req, res) => {
+router.get('/picture', authVideoset, async (req, res) => {
     try {
-        await req.subcategory.populate({
+        await req.videoset.populate({
             path:'pictures'
         }).execPopulate()
-        res.status(200).send(req.subcategory.pictures)
+        res.status(200).send(req.videoset.pictures)
     } catch (error) {
         res.status(500).send(error)
     }

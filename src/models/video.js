@@ -27,7 +27,7 @@ const videoSchema = new mongoose.Schema({
     owner:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
-        ref:'Subcategory'
+        ref:'Videoset'
     }
 },{
     timestamps:true
