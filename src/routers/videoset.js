@@ -4,25 +4,16 @@ const authUser = require('../middleware/authUser')
 const authAdmin = require('../middleware/authAdmin')
 const authMainAdmin = require('../middleware/authMainAdmin')
 const authSubcategory = require('../middleware/authSubcategory')
-const authCategory = require('../middleware/authCategory')
 const router = new Router()
 
-router.post('/videoset',authUser, authAdmin, authMainAdmin, authCategory,authSubcategory, async (req, res) => {
+router.post('/videoset',authUser, authAdmin, authSubcategory, async (req, res) => {
+    console.log(req.body)
     const videoset = new Videoset({
         ...req.body,
-        owner: req.videoset._id
+        owner: req.subcategory._id
     })
 
     try {
-        const testVideoset = await Videoset.findOne({})
-        if(testVideoset && testVideoset.type !== videoset.type)
-            return res.status(400).send(`Wrong type of videoset, needs ${testVideoset.type}`)
-
-        if(!testVideoset){
-            req.subcategory.videosetsType = videoset.type
-            await req.subcategory.save()
-        }
-
         await videoset.save()
         res.status(201).send(videoset)
     } catch (error) {
@@ -39,14 +30,26 @@ router.post('/videoset',authUser, authAdmin, authMainAdmin, authCategory,authSub
 //     }
 // })
 
-router.get('/videosets',authCategory, authSubcategory, async (req, res) => {
+router.get('/videosets', authSubcategory, async (req, res) => {
     try {
-        await req.category.populate({
-            path: 'subcategories'
+        await req.subcategory.populate({
+            path: 'videosets'
         }).execPopulate()
-        res.status(200).send(req.category.subcategories)
+        res.status(200).send(req.subcategory.videosets)
     }
     catch (error) {
+        res.status(500).send()
+    }
+})
+
+router.get('/videoset/:id', async (req,res) =>{
+    try {
+        const videoset = await Videoset.findOne({_id:req.params.id})
+        if(!videoset)
+            return res.status(404).send()
+        
+        res.status(200).send(videoset)
+    } catch (error) {
         res.status(500).send()
     }
 })

@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const videosetSchema = new mongoose.Schema({
     name:{
         type:String,
-        required: true
+        required: true,
+        unique:true
     },
     description:{
         type:String,
@@ -16,7 +17,7 @@ const videosetSchema = new mongoose.Schema({
     isPublished:{
         type:Boolean,
         required:true,
-        default:false
+        default:true
     },
     owner:{
         type: mongoose.Schema.Types.ObjectId,

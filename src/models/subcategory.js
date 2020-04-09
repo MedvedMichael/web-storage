@@ -10,28 +10,16 @@ const subcategorySchema = new mongoose.Schema({
         required:true,
         unique:true
     },
-    
-    description:{
-        type:String,
-        required:false
-    },
-    subtitle:{
-        type:String,
-        required:false
-    },
     isPublished:{
         type:Boolean,
         required:true,
-        default:false
+        default:true
     },
+    
     owner:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
         ref:'Category'
-    },
-    categoryName:{
-        type: String,
-        required: true
     }
 })
 

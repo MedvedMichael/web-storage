@@ -1,10 +1,9 @@
 const express = require('express')
 const Video = require('../models/video')
-// const Videoset = require('../models/videoset')
-// const authSubcategory  = require('../middleware/authSubcategory')
 const authVideoset = require('../middleware/authVideoset')
 const authUser = require('../middleware/authUser')
 const authAdmin = require('../middleware/authAdmin')
+const authMainAdmin = require('../middleware/authMainAdmin')
 const router = new express.Router()
 
 router.post('/video', authUser,authAdmin, authVideoset, async (req, res) => {
@@ -20,7 +19,7 @@ router.post('/video', authUser,authAdmin, authVideoset, async (req, res) => {
     }
 })
 
-router.get('/video', authVideoset, async (req, res) => {
+router.get('/videos', authVideoset, async (req, res) => {
     try {
         await req.videoset.populate({
             path:'videos'
@@ -28,6 +27,18 @@ router.get('/video', authVideoset, async (req, res) => {
         res.status(200).send(req.videoset.videos)
     } catch (error) {
         res.status(500).send(error)
+    }
+})
+
+router.get('/video/:id', async (req,res)=>{
+    try {
+        const video = await Video.findOne({_id:req.params.id})
+        if(!video)
+            return res.status(404).send()
+        
+        res.status(200).send(video)
+    } catch (error) {
+        res.status(500).send()
     }
 })
 
@@ -44,7 +55,7 @@ router.delete('/video', authUser,authAdmin, async (req, res) => {
     }
 })
 
-router.get('/videosall', authUser,authAdmin, async (req,res)=>{
+router.get('/videosall', authUser, authMainAdmin, async (req,res)=>{
     try {
         const videos = await Video.find({})
         res.status(200).send(videos)

@@ -16,7 +16,6 @@ router.post('/categories', authUser, authMainAdmin, async (req, res) => {
     }
 })
 
-
 router.patch('/categories', authUser, authMainAdmin, async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name','isPublished']

@@ -3,6 +3,7 @@ require('./db/mongoose')
 const cors = require('cors')
 
 const videoRouter = require('./routers/video')
+const videosetRouter = require('./routers/videoset')
 const categoryRouter = require('./routers/category')
 const subcategoryRouter = require('./routers/subcategory')
 const userRouter = require('./routers/user')
@@ -16,6 +17,7 @@ app.get('/',(req,res)=>{
 })
 
 app.use(express.json())
+app.use(videosetRouter)
 app.use(categoryRouter)
 app.use(subcategoryRouter)
 app.use(videoRouter)
