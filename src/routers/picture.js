@@ -19,7 +19,7 @@ router.post('/picture', authUser, authAdmin, authVideoset, async (req, res) => {
     }
 })
 
-router.get('/picture', authVideoset, async (req, res) => {
+router.get('/pictures', authVideoset, async (req, res) => {
     try {
         await req.videoset.populate({
             path:'pictures'

@@ -29,6 +29,18 @@ router.post('/subcategories',authUser, authAdmin, authMainAdmin, authCategory, a
     }
 })
 
+router.get('/subcategories/:id', async (req,res)=>{
+    try {
+        const subcategory = await Subcategory.findOne({_id:req.params.id})
+        if(!subcategory)
+            res.status(404).send()
+        
+        res.status(200).send(subcategory)
+    } catch (error) {
+        res.status(500).send()
+    }
+})
+
 // router.get('/subcategories', async (req,res)=>{
 //     try {
 //         const subcategories = await Subcategory.find({})
