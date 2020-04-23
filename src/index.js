@@ -1,19 +1,25 @@
 const express = require('express')
 require('./db/mongoose')
-const cors = require('cors')
 
+const cors = require('cors')
 const videoRouter = require('./routers/video')
 const videosetRouter = require('./routers/videoset')
 const categoryRouter = require('./routers/category')
 const subcategoryRouter = require('./routers/subcategory')
 const userRouter = require('./routers/user')
 const pictureRouter = require('./routers/picture')
-const PORT = process.env.PORT
+//TEMPORARY
+const bodyParser = require('body-parser')
 
+const PORT = process.env.PORT
 const app = express()
+app.use(bodyParser.json());
 app.use(cors())
+app.set('view engine','ejs');
 app.get('/',(req,res)=>{
-    res.status(200).send("Okay")
+    // TEMPORARY!!!
+    res.render('index')
+    //res.status(200).send("Okay")
 })
 
 app.use(express.json())

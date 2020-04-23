@@ -7,16 +7,20 @@ const videoSchema = new mongoose.Schema({
         unique:true,
         required:true,
         trim:true,
-        
     },
     source:{
         type:String,
         default:'external'
     },
+    file:{
+        type: Object,
+        required: false,
+        unique:true
+    },
     url:{
         type:String,
         trim:true,
-        required:true,
+        required:false,
         unique:true,
         validate(value){
             if(!validator.isURL(value)){
