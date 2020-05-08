@@ -6,17 +6,18 @@ const authAdmin = require('../middleware/authAdmin')
 const authVideoset = require('../middleware/authVideoset')
 const router = new express.Router()
 
-router.post('/picture', authUser, authAdmin, authVideoset, async (req, res) => {
-    const picture = new Picture({
+
+router.post('/picture', authUser, authAdmin, authVideoset,global.uploadPicture.single('videofile'), async (req, res) => {
+ const picture = new Picture({
         ...req.body,
         owner: req.videoset._id
     })
     try {
         await picture.save()
-        res.status(201).send(video)
-    } catch (error) {
-        res.status(400).send(error)
-    }
+       res.status(201).send(video)
+   } catch (error) {
+       res.status(400).send(error)
+   }
 })
 
 router.get('/pictures', authVideoset, async (req, res) => {
@@ -35,8 +36,9 @@ router.delete('/picture', authUser, authAdmin, async (req, res) => {
     const id = req.query.id
     try {
         const picture = await Picture.findOneAndDelete({ _id: id })
-        if (!video)
+        if (!picture)
             res.status(404).send()
+        global.gfsPicture.remove({filename: picture.file.filename, root:"pictures"})
         res.status(200).send(picture)
     } catch (error) {
         res.status(500).send()
