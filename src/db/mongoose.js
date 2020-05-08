@@ -5,14 +5,20 @@ const multer = require('multer');
 const GridFsStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 
-
-var conn = mongoose.createConnection(process.env.MONGODB_URL,{
+mongoose.connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
     useCreateIndex: true
 })
-var gfs;
+
+const conn = mongoose.createConnection(process.env.MONGODB_URL,{
+    useNewUrlParser: true,
+    useCreateIndex: true
+})
+let gfs;
+
 conn.once('open',()=>{
-    gfs = Grid(global.conn.db,mongoose.mongo);
+    const db = conn.db
+    gfs = Grid(db,mongoose.mongo);
     gfs.collection('videos')
 })
 
@@ -37,5 +43,5 @@ const storage = new GridFsStorage({
 var upload = multer({storage});
 global.gfs = gfs;
 global.upload = upload;
-global.conn = conn;
+// global.conn = conn;
 
