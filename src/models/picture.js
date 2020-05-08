@@ -9,13 +9,18 @@ const pictureSchema = new mongoose.Schema({
     url:{
         type:String,
         trim:true,
-        required:true,
+        required:false,
         unique:true,
         validate(value){
             if(!validator.isURL(value)){
                 throw new Error('Your url is not valid!')
             }
         }
+    },
+    file:{
+            type: Object,
+            required: false,
+            unique:true
     },
     owner:{
         type:mongoose.Schema.Types.ObjectId,

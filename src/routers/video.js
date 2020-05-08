@@ -7,7 +7,7 @@ const authMainAdmin = require('../middleware/authMainAdmin')
 const router = new express.Router()
 
 
-router.post('/video', authUser,authAdmin,authVideoset, global.upload.single("filename"), async (req, res) => {
+router.post('/video', authUser,authAdmin,authVideoset, global.uploadVideo.single("videofile"), async (req, res) => {
 
     const video = new Video({
         ...req.body,
@@ -38,7 +38,7 @@ router.get('/video/:id',authVideoset, async (req,res)=>{
         if(!video)
             return res.status(404).send()
 
-        const readstream = gfs.createReadStream(video.file.filename)
+        const readstream = gfsVideo.createReadStream(video.file.filename)
         readstream.pipe(res);
     } catch (error) {
         res.status(500).send()
@@ -52,7 +52,7 @@ router.delete('/video', authUser,authAdmin, authVideoset, async (req, res) => {
         const video = await Video.findOneAndDelete({ _id: id })
         if (!video)
             res.status(404).send()
-        gfs.remove({filename: video.file.filename, root:"videos"})
+        global.gfsVideo.remove({filename: video.file.filename, root:"videos"})
         res.status(200).send(video)
     } catch (error) {
         res.status(500).send()
