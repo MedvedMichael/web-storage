@@ -6,6 +6,10 @@ const GridFsStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 let connection = {
     init: () => {
+        mongoose.connect(process.env.MONGODB_URL, {
+            useNewUrlParser: true,
+            useCreateIndex: true
+        })
         const conn = mongoose.createConnection(process.env.MONGODB_URL, {
             useNewUrlParser: true,
             useCreateIndex: true
