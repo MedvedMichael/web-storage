@@ -1,5 +1,6 @@
 const express = require('express')
 const Video = require('../models/video')
+const connection = require('../db/mongoose')
 const authVideoset = require('../middleware/authVideoset')
 const authUser = require('../middleware/authUser')
 const authAdmin = require('../middleware/authAdmin')
@@ -7,7 +8,7 @@ const authMainAdmin = require('../middleware/authMainAdmin')
 const router = new express.Router()
 
 
-router.post('/video', authUser,authAdmin,authVideoset, global.uploadVideo.single("videofile"), async (req, res) => {
+router.post('/video', authUser,authAdmin,authVideoset, connection.uploadVideo.single("videofile"), async (req, res) => {
 
     const video = new Video({
         ...req.body,
@@ -38,7 +39,7 @@ router.get('/video/:id',authVideoset, async (req,res)=>{
         if(!video)
             return res.status(404).send()
 
-        global.gfsVideo.files.findOne({filename:video.file.filename},(err,file)=>{
+        connection.gfsVideo.files.findOne({filename:video.file.filename},(err,file)=>{
             if(err){
                 return res.status(404).json("not finded");
             }
@@ -61,7 +62,7 @@ router.get('/video/:id',authVideoset, async (req,res)=>{
                     'Content-Type': file.contentType
                 });
 
-                global.gfsVideo.createReadStream({
+                connection.gfsVideo.createReadStream({
                     _id: file._id,
                     range: {
                         startPos: start,
@@ -72,7 +73,7 @@ router.get('/video/:id',authVideoset, async (req,res)=>{
                 res.header('Content-Length', file.length);
                 res.header('Content-Type', file.contentType);
 
-                global.gfsVideo.createReadStream({
+                connection.gfsVideo.createReadStream({
                     _id: file._id
                 }).pipe(res);
             }
@@ -90,7 +91,7 @@ router.delete('/video', authUser,authAdmin, authVideoset, async (req, res) => {
         const video = await Video.findOneAndDelete({ _id: id })
         if (!video)
             res.status(404).send()
-        global.gfsVideo.remove({filename: video.file.filename, root:"videos"})
+        connection.gfsVideo.remove({filename: video.file.filename, root:"videos"})
         res.status(200).send(video)
     } catch (error) {
         res.status(500).send()

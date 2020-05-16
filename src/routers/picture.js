@@ -1,13 +1,14 @@
 const express = require('express')
 const Picture = require('../models/picture')
 //const authSubcategory  = require('../middleware/authSubcategory')
+const connection = require('../db/mongoose')
 const authUser = require('../middleware/authUser')
 const authAdmin = require('../middleware/authAdmin')
 const authVideoset = require('../middleware/authVideoset')
 const router = new express.Router()
 
 
-router.post('/picture', authUser, authAdmin, authVideoset,global.uploadPicture.single('videofile'), async (req, res) => {
+router.post('/picture', authUser, authAdmin, authVideoset,connection.uploadPicture.single('videofile'), async (req, res) => {
  const picture = new Picture({
         ...req.body,
         owner: req.videoset._id
@@ -38,7 +39,7 @@ router.delete('/picture', authUser, authAdmin, async (req, res) => {
         const picture = await Picture.findOneAndDelete({ _id: id })
         if (!picture)
             res.status(404).send()
-        global.gfsPicture.remove({filename: picture.file.filename, root:"pictures"})
+        connection.gfsPicture.remove({filename: picture.file.filename, root:"pictures"})
         res.status(200).send(picture)
     } catch (error) {
         res.status(500).send()
