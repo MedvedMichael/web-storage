@@ -19,6 +19,9 @@ const videosetSchema = new mongoose.Schema({
         required:true,
         default:true
     },
+    order:{
+        type: Array
+    },
     owner:{
         type: mongoose.Schema.Types.ObjectId,
         required:true,

@@ -38,8 +38,46 @@ router.get('/video/:id',authVideoset, async (req,res)=>{
         if(!video)
             return res.status(404).send()
 
-        const readstream = gfsVideo.createReadStream(video.file.filename)
-        readstream.pipe(res);
+        global.gfsVideo.files.findOne({filename:video.file.filename},(err,file)=>{
+            if(err){
+                return res.status(404).json("not finded");
+            }
+            if(!file){
+                return res.status(404).json("not finded");
+            }
+            if (req.headers['range']) {
+                let parts = req.headers['range'].replace(/bytes=/, "").split("-");
+                let partialstart = parts[0];
+                let partialend = parts[1];
+
+                let start = parseInt(partialstart, 10);
+                let end = partialend ? parseInt(partialend, 10) : file.length - 1;
+                let chunksize = (end - start) + 1;
+
+                res.writeHead(206, {
+                    'Accept-Ranges': 'bytes',
+                    'Content-Length': chunksize,
+                    'Content-Range': 'bytes ' + start + '-' + end + '/' + file.length,
+                    'Content-Type': file.contentType
+                });
+
+                global.gfsVideo.createReadStream({
+                    _id: file._id,
+                    range: {
+                        startPos: start,
+                        endPos: end
+                    }
+                }).pipe(res);
+            } else {
+                res.header('Content-Length', file.length);
+                res.header('Content-Type', file.contentType);
+
+                global.gfsVideo.createReadStream({
+                    _id: file._id
+                }).pipe(res);
+            }
+        })
+
     } catch (error) {
         res.status(500).send()
     }
