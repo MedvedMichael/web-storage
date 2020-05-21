@@ -33,8 +33,6 @@ const authUser = async (req, res, next) => {
 
         req.user = user
         req.token = token
-
-        
         if(!req.user.ban)
             next()
 

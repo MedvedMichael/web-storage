@@ -2,6 +2,7 @@ const Videoset = require('../models/videoset')
 
 const authVideoset = async (req,res,next) =>{
     try {
+
         const videosetId = req.query.videosetId
         const videoset = await Videoset.findOne({_id:videosetId})
         if(!videoset)

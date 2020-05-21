@@ -1,6 +1,4 @@
 const express = require('express')
-const connection = require('./db/mongoose')
-connection.init();
 const cors = require('cors')
 const videoRouter = require('./routers/video')
 const videosetRouter = require('./routers/videoset')

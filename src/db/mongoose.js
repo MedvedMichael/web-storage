@@ -14,17 +14,17 @@ let connection = {
             useNewUrlParser: true,
             useCreateIndex: true
         })
-        this.conn =conn;
+
         let gfsVideo, gfsPicture;
-        this.conn.once('open', () => {
+        conn.once('open', () => {
             gfsVideo = Grid(conn.db, mongoose.mongo);
             gfsPicture = Grid(conn.db, mongoose.mongo);
             gfsVideo.collection('videos')
             gfsPicture.collection('pictures')
-            this.gfsVideo = gfsVideo;
-            this.gfsPicture = gfsPicture;
+            connection.gfsVideo = gfsVideo;
+            connection.gfsPicture = gfsPicture;
         })
-
+        this.conn = conn;
         const storageVideo = new GridFsStorage({
             url: process.env.MONGODB_URL,
             file: (req, file) => {
@@ -68,5 +68,9 @@ let connection = {
         connection.uploadVideo = uploadVideo;
         connection.uploadPicture = uploadPicture;
     }
+}
+
+if(!connection.gfsVideo){
+    connection.init();
 }
 module.exports = connection
