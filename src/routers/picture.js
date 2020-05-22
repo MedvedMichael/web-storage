@@ -15,7 +15,7 @@ router.post('/picture', authUser, authAdmin, authVideoset,connection.uploadPictu
     })
     try {
         await picture.save()
-       res.status(201).send(video)
+       res.status(201).send(picture)
    } catch (error) {
        res.status(400).send(error)
    }

@@ -7,7 +7,6 @@ const authSubcategory = require('../middleware/authSubcategory')
 const router = new Router()
 
 router.post('/videoset',authUser, authAdmin, authSubcategory, async (req, res) => {
-    console.log(req.body)
     const videoset = new Videoset({
         ...req.body,
         owner: req.subcategory._id
@@ -57,7 +56,7 @@ router.get('/videoset/:id', async (req,res) =>{
 
 router.patch('/videosets', authUser, authAdmin,authMainAdmin, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name', 'subtitle','isPublished', 'description']
+    const allowedUpdates = ['name', 'subtitle','isPublished', 'description','order']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
     if (!isValidOperation) {
         return res.status(400).send({ error: 'Invalid updates' })
