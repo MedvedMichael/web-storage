@@ -7,7 +7,7 @@ const authAdmin = require('../middleware/authAdmin')
 const authVideoset = require('../middleware/authVideoset')
 const router = new express.Router()
 
-router.post('/picture/upload/:id', connection.uploadVideo.any("picturefile"),async (req,res)=>{
+router.post('/picture/upload/:id', connection.uploadPicture.any("picturefile"),async (req,res)=>{
     try{
         let picture = await Picture.findOneAndUpdate({_id:req.params.id},{file:req.files[0].id})
         res.status(201).send(picture)
@@ -61,6 +61,17 @@ router.get('/picturesall', authUser, authAdmin, async (req,res)=>{
     } catch (error) {
         res.status(500).send()
     }
+})
+
+router.get('/picture/:id',async(req,res)=>{
+     try {
+            const picture = await Picture.findOne({_id:req.params.id})
+            if(!picture)
+                return res.status(404).send()
+            connection.gfsPicture.createReadStream({_id: picture.file._id}).pipe(res);
+     }catch(err){
+       return res.status(404).send()
+     }
 })
 
 
