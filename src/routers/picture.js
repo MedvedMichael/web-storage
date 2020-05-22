@@ -7,9 +7,9 @@ const authAdmin = require('../middleware/authAdmin')
 const authVideoset = require('../middleware/authVideoset')
 const router = new express.Router()
 
-router.post('/picture/upload/:id', connection.uploadVideo.single("picturefile"),async (req,res)=>{
+router.post('/picture/upload/:id', connection.uploadVideo.any("picturefile"),async (req,res)=>{
     try{
-        let picture = await Picture.findOneAndUpdate({_id:req.params.id},{file:req.file.id})
+        let picture = await Picture.findOneAndUpdate({_id:req.params.id},{file:req.files[0].id})
         res.status(201).send(picture)
     }
     catch (err) {
@@ -17,7 +17,6 @@ router.post('/picture/upload/:id', connection.uploadVideo.single("picturefile"),
     }
 })
 router.post('/picture', authUser, authAdmin, authVideoset, async (req, res) => {
-console.log("int")
  const picture = new Picture({
         ...req.body,
         owner: req.videoset._id

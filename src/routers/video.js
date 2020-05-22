@@ -8,10 +8,13 @@ const authMainAdmin = require('../middleware/authMainAdmin')
 const router = new express.Router()
 
     //
-router.post('/video/upload/:id', connection.uploadVideo.single("videofile"),async (req,res)=>{
+router.post('/video/upload/:id', connection.uploadVideo.any("videofile"),async (req,res)=>{
     console.log(connection.gfsVideo)
+    console.log(req.files[0].id)
     try{
-        let video = await Video.findOneAndUpdate({_id:req.params.id},{file:req.file.id})
+        const video = await Video.findOne({_id:req.params.id})
+        video.file = req.files[0].id
+        await video.save()
         res.status(201).send(video)
     }
     catch (err) {
@@ -26,10 +29,11 @@ router.post('/video', authUser,authAdmin,authVideoset, async (req, res) => {
     })
     try {
         await video.save()
+        res.status(201).send(video)
     } catch (error) {
         res.status(400).send(error)
     }
-    res.status(201).send(video);
+    
 
 })
 
@@ -52,6 +56,7 @@ router.get('/video/:id', async (req,res)=>{
         if(video.source!=='external') {
             connection.gfsVideo.files.findOne({_id: video.file}, (err, file) => {
                 console.log(file)
+                // console.log("KU")
                 if (err) {
                     return res.status(404).json("not finded");
                 }

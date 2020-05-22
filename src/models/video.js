@@ -13,7 +13,7 @@ const videoSchema = new mongoose.Schema({
         default:'external',
         required:true
     },
-    videofile:{
+    file:{
         type: Object,
         required: true
     },
