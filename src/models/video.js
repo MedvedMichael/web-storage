@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const validator = require('validator')
+// const validator = require('validator')
 
 const videoSchema = new mongoose.Schema({
     name:{
@@ -10,23 +10,12 @@ const videoSchema = new mongoose.Schema({
     },
     source:{
         type:String,
-        default:'external'
+        default:'external',
+        required:true
     },
     videofile:{
         type: Object,
-        required: false,
-        unique:false
-    },
-    url:{
-        type:String,
-        trim:true,
-        required:false,
-        unique:true,
-        validate(value){
-            if(!validator.isURL(value)){
-                throw new Error('Your url is not valid!')
-            }
-        }
+        required: true
     },
     owner:{
         type:mongoose.Schema.Types.ObjectId,
