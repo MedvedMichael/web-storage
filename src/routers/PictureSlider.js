@@ -1,20 +1,20 @@
 const { Router } = require('express')
-const Videoset = require('../models/videoset')
+const PictureSlider = require('../models/PictureSlider')
 const authUser = require('../middleware/authUser')
 const authAdmin = require('../middleware/authAdmin')
 const authMainAdmin = require('../middleware/authMainAdmin')
-const authSubcategory = require('../middleware/authSubcategory')
+const authVideoset = require('../middleware/authVideoset')
 const router = new Router()
 
-router.post('/videoset',authUser, authAdmin, authSubcategory, async (req, res) => {
-    const videoset = new Videoset({
+router.post('/pictureslider',authUser, authAdmin, authVideoset, async (req, res) => {
+    const pictureslider = new PictureSlider({
         ...req.body,
-        owner: req.subcategory._id
+        owner: req.videoset._id
     })
 
     try {
-        await videoset.save()
-        res.status(201).send(videoset)
+        await pictureslider.save()
+        res.status(201).send(req.videoset)
     } catch (error) {
         res.status(400).send(error)
     }
@@ -29,64 +29,64 @@ router.post('/videoset',authUser, authAdmin, authSubcategory, async (req, res) =
 //     }
 // })
 
-router.get('/videosets', authSubcategory, async (req, res) => {
+router.get('/picturesliders', authVideoset, async (req, res) => {
     try {
-        await req.subcategory.populate({
-            path: 'videosets'
+        await req.videoset.populate({
+            path: 'picturesliders'
         }).execPopulate()
-        res.status(200).send(req.subcategory.videosets)
+        res.status(200).send(req.videoset.picturesliders)
     }
     catch (error) {
         res.status(500).send()
     }
 })
 
-router.get('/videoset/:id', async (req,res) =>{
+router.get('/pictureslider/:id', async (req,res) =>{
     try {
-        const videoset = await Videoset.findOne({_id:req.params.id})
-        if(!videoset)
+        const pictureslider = await PictureSlider.findOne({_id:req.params.id})
+        if(!pictureslider)
             return res.status(404).send()
-        
-        res.status(200).send(videoset)
+
+        res.status(200).send(pictureslider)
     } catch (error) {
         res.status(500).send()
     }
 })
 
 
-router.patch('/videosets', authUser, authAdmin,authMainAdmin, async (req, res) => {
+router.patch('/picturesliders', authUser, authAdmin,authMainAdmin, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name', 'subtitle','isPublished', 'description','order']
+    const allowedUpdates = ['isPublished','order']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
     if (!isValidOperation) {
         return res.status(400).send({ error: 'Invalid updates' })
     }
 
     try {
-        const videoset = await Videoset.findOne({
+        const pictureslider = await PictureSlider.findOne({
             _id: req.query.id
         })
 
-        if (!videoset)
+        if (!pictureslider)
             return res.status(404).send()
 
-        updates.forEach((update) => videoset[update] = req.body[update])
-        await videoset.save()
+        updates.forEach((update) => pictureslider[update] = req.body[update])
+        await pictureslider.save()
 
 
-        res.status(200).send(videoset)
+        res.status(200).send(pictureslider)
     } catch (error) {
         res.status(500).send(error)
     }
 })
 
-router.delete('/videoset',authUser,authAdmin,async (req,res)=>{
+router.delete('/pictureslider',authUser,authAdmin,async (req,res)=>{
     const id = req.query.id
     try {
-        const videoset = await Videoset.findOneAndDelete({_id: id});
-        if(!videoset)
+        const pictureSlider = await PictureSlider.findOneAndDelete({_id: id});
+        if(!pictureSlider)
             res.status(400).send()
-        res.status(201).send(videoset)
+        res.status(201).send(pictureSlider)
     }
     catch (err) {
         res.status(400).send(err)

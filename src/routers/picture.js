@@ -4,7 +4,7 @@ const Picture = require('../models/picture')
 const connection = require('../db/mongoose')
 const authUser = require('../middleware/authUser')
 const authAdmin = require('../middleware/authAdmin')
-const authVideoset = require('../middleware/authVideoset')
+const authPictureSlider = require('../middleware/authPictureSlider')
 const router = new express.Router()
 
 router.post('/picture/upload/:id', connection.uploadPicture.any("picturefile"),async (req,res)=>{
@@ -16,10 +16,10 @@ router.post('/picture/upload/:id', connection.uploadPicture.any("picturefile"),a
         res.status(400).send(err);
     }
 })
-router.post('/picture', authUser, authAdmin, authVideoset, async (req, res) => {
+router.post('/picture', authUser, authAdmin, authPictureSlider, async (req, res) => {
  const picture = new Picture({
         ...req.body,
-        owner: req.videoset._id
+        owner: req.pictureslider._id
     })
     try {
        await picture.save()
@@ -29,12 +29,12 @@ router.post('/picture', authUser, authAdmin, authVideoset, async (req, res) => {
    }
 })
 
-router.get('/pictures', authVideoset, async (req, res) => {
+router.get('/pictures',  authPictureSlider,async (req, res) => {
     try {
-        await req.videoset.populate({
+        await req.pictureslider.populate({
             path:'pictures'
         }).execPopulate()
-        res.status(200).send(req.videoset.pictures)
+        res.status(200).send(req.pictureslider.pictures)
     } catch (error) {
         res.status(500).send(error)
     }
@@ -45,9 +45,10 @@ router.delete('/picture', authUser, authAdmin, async (req, res) => {
     const id = req.query.id
     try {
         const picture = await Picture.findOneAndDelete({ _id: id })
+        console.log(picture)
         if (!picture)
             res.status(404).send()
-        connection.gfsPicture.remove({filename: picture.file.filename, root:"pictures"})
+        connection.gfsPicture.remove({_id:picture.file, root:"pictures"})
         res.status(200).send(picture)
     } catch (error) {
         res.status(500).send()

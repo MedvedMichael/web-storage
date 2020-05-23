@@ -34,8 +34,8 @@ videosetSchema.virtual('videos',{
     localField:'_id',
     foreignField:'owner'
 })
-videosetSchema.virtual('pictures',{
-    ref:'Picture',
+videosetSchema.virtual('picturesliders',{
+    ref:'PictureSlider',
     localField:'_id',
     foreignField:'owner'
 })
