@@ -51,7 +51,6 @@ router.delete('/picture', authUser, authAdmin, async (req, res) => {
             return res.status(404).send()
         await picture.remove()
         // connection.gfsPicture.remove({filename: picture.file, root:"pictures"})
-        // connection.gfsPicture.remove({_id:picture.file, root:"pictures"})
 
         res.status(200).send(picture)
     } catch (error) {
