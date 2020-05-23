@@ -111,7 +111,7 @@ router.delete('/video', authUser,authAdmin, async (req, res) => {
         const video = await Video.findOneAndDelete({ _id: id })
         if (!video)
             res.status(404).send()
-        connection.gfsVideo.remove({_id: video.file, root:"videos"})
+
         res.status(200).send(video)
     } catch (error) {
         res.status(500).send()

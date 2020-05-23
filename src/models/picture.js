@@ -17,7 +17,13 @@ const pictureSchema = new mongoose.Schema({
     timestamps: true
 })
 
-
+pictureSchema.pre('remove',async (next)=>{
+    const picture = this
+    if(picture.source==='local'){
+        await connection.gfsPicture.remove({_id:picture.file, root:"pictures"})
+    }
+    next()
+})
 
 const Picture = mongoose.model('Picture', pictureSchema)
 
