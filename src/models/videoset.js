@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const PictureSlider = require("./PictureSlider");
+const PictureSlider = require("./picture-slider");
 const Video = require("./video");
 
 const videosetSchema = new mongoose.Schema({

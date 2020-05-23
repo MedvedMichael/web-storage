@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Picture = require("./pictureg");
+const Picture = require("./picture");
 
 const PictureSliderSchema = new mongoose.Schema({
     isPublished:{
