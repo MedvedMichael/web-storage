@@ -6,14 +6,7 @@ const videosetSchema = new mongoose.Schema({
         required: true,
         unique:true
     },
-    description:{
-        type:String,
-        required:false
-    },
-    subtitle:{
-        type:String,
-        required:false
-    },
+    
     isPublished:{
         type:Boolean,
         required:true,
@@ -34,8 +27,9 @@ videosetSchema.virtual('videos',{
     localField:'_id',
     foreignField:'owner'
 })
-videosetSchema.virtual('pictures',{
-    ref:'Picture',
+
+videosetSchema.virtual('picture-sliders',{
+    ref:'PictureSlider',
     localField:'_id',
     foreignField:'owner'
 })

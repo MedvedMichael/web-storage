@@ -76,4 +76,17 @@ router.patch('/videosets', authUser, authAdmin,authMainAdmin, authVideoset, asyn
     }
 })
 
+router.delete('/videoset',authUser,authAdmin,async (req,res)=>{
+    const id = req.query.id
+    try {
+        const videoset = await Videoset.findOneAndDelete({_id: id});
+        if(!videoset)
+            res.status(400).send()
+        res.status(201).send(videoset)
+    }
+    catch (err) {
+        res.status(400).send(err)
+    }
+})
+
 module.exports = router

@@ -6,6 +6,7 @@ const categoryRouter = require('./routers/category')
 const subcategoryRouter = require('./routers/subcategory')
 const userRouter = require('./routers/user')
 const pictureRouter = require('./routers/picture')
+const pictureSliderRouter = require('./routers/picture-slider')
 //TEMPORARY
 const bodyParser = require('body-parser')
 
@@ -21,6 +22,7 @@ app.get('/',(req,res)=>{
 })
 
 app.use(express.json())
+app.use(pictureSliderRouter)
 app.use(videosetRouter)
 app.use(categoryRouter)
 app.use(subcategoryRouter)
