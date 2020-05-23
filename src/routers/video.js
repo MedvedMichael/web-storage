@@ -1,7 +1,7 @@
 const express = require('express')
 const Video = require('../models/video')
 const connection = require('../db/mongoose')
-const authVideoset = require('../middleware/authVideoset')
+const authVideosContainer = require('../middleware/authVideosContainer')
 const authUser = require('../middleware/authUser')
 const authAdmin = require('../middleware/authAdmin')
 const authMainAdmin = require('../middleware/authMainAdmin')
@@ -21,11 +21,11 @@ router.post('/video/upload/:id', connection.uploadVideo.any("videofile"),async (
         res.status(400).send(err);
     }
 })
-router.post('/video', authUser,authAdmin,authVideoset, async (req, res) => {
+router.post('/video', authUser,authAdmin,authVideosContainer, async (req, res) => {
 
     const video = new Video({
         ...req.body,
-        owner: req.videoset._id,
+        owner: req.videosContainer._id,
     })
     try {
         await video.save()
@@ -37,7 +37,7 @@ router.post('/video', authUser,authAdmin,authVideoset, async (req, res) => {
 
 })
 
-router.get('/videos', authVideoset, async (req, res) => {
+router.get('/videos', authVideosContainer, async (req, res) => {
     try {
         await req.videoset.populate({
             path:'videos'
@@ -55,7 +55,7 @@ router.get('/video/:id', async (req,res)=>{
             return res.status(404).send()
         if(video.source!=='external') {
             connection.gfsVideo.files.findOne({_id: video.file}, (err, file) => {
-                console.log(file)
+                // console.log(file)
                 // console.log("KU")
                 if (err) {
                     return res.status(404).json("not finded");
@@ -108,9 +108,11 @@ router.get('/video/:id', async (req,res)=>{
 router.delete('/video', authUser,authAdmin, async (req, res) => {
     const id = req.query.id
     try {
-        const video = await Video.findOneAndDelete({ _id: id })
+        const video = await Video.findOne({ _id: id })
         if (!video)
             res.status(404).send()
+
+        await video.remove()
 
         res.status(200).send(video)
     } catch (error) {

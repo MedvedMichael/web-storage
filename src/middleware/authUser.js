@@ -38,6 +38,7 @@ const authUser = async (req, res, next) => {
 
         
     } catch (error) {
+        console.log("KUKU")
         res.status(401).send('Please authenticate!')
     }
 }

@@ -24,8 +24,8 @@ const videosetSchema = new mongoose.Schema({
     }
 })
 
-videosetSchema.virtual('videos',{
-    ref:'Video',
+videosetSchema.virtual('videos-containers',{
+    ref:'VideosContainer',
     localField:'_id',
     foreignField:'owner'
 })

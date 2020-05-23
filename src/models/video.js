@@ -20,7 +20,7 @@ const videoSchema = new mongoose.Schema({
     owner:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
-        ref:'Videoset'
+        ref:'VideosContainer'
     }
 },{
     timestamps:true
