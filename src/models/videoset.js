@@ -35,7 +35,7 @@ videosetSchema.virtual('picture-sliders',{
     localField:'_id',
     foreignField:'owner'
 })
-videosetSchema.pre('remove', async (next)=>{
+videosetSchema.pre('remove', async function (next){
     const videoset = this
     await Video.deleteMany({
         owner: videoset._id

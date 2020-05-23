@@ -26,7 +26,7 @@ const videoSchema = new mongoose.Schema({
     timestamps:true
 })
 
-videoSchema.pre('remove',async (next)=>{
+videoSchema.pre('remove',async function(next){
     const video = this
     if(video.source==='local') {
         await connection.gfsVideo.remove({_id: video.file, root: "videos"})

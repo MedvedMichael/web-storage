@@ -21,7 +21,7 @@ PictureSliderSchema.virtual('pictures',{
     foreignField:'owner'
 })
 
-PictureSliderSchema.pre('remove',async (next)=>{
+PictureSliderSchema.pre('remove',async function(next){
     const pictureSlider = this
     await Picture.deleteMany({
         owner:pictureSlider._id
