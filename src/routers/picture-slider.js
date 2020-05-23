@@ -83,10 +83,12 @@ router.patch('/picture-sliders', authUser, authAdmin,authMainAdmin, async (req, 
 router.delete('/picture-slider',authUser,authAdmin,async (req,res)=>{
     const id = req.query.id
     try {
-        const pictureSlider = await PictureSlider.findOneAndDelete({_id: id});
+        const pictureSlider = await PictureSlider.findOne({_id: id});
         if(!pictureSlider)
             res.status(400).send()
-        res.status(201).send(pictureSlider)
+
+        await pictureSlider.remove()
+        res.status(200).send(pictureSlider)
     }
     catch (err) {
         res.status(400).send(err)

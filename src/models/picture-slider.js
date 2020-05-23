@@ -21,12 +21,19 @@ PictureSliderSchema.virtual('pictures',{
     foreignField:'owner'
 })
 
-PictureSliderSchema.pre('remove',async (next)=>{
+PictureSliderSchema.pre('remove',async function(next){
     const pictureSlider = this
-    await Picture.deleteMany({
-        owner:pictureSlider._id
-    })
+    try {
+        const pictures = await Picture.find({
+            owner: pictureSlider._id
+        })
+        for(let i=0;i<pictures.length;i++)
+        await pictures[i].remove()
+    }
+    catch (error) {
+        console.log(error)
+    }
     next()
 })
-const PictureSlider= new mongoose.model('PictureSlider',PictureSliderSchema);
+const PictureSlider = new mongoose.model('PictureSlider', PictureSliderSchema);
 module.exports = PictureSlider;

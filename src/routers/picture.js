@@ -46,12 +46,12 @@ router.get('/pictures',  authPictureSlider,async (req, res) => {
 router.delete('/picture', authUser, authAdmin, async (req, res) => {
     const id = req.query.id
     try {
-        const picture = await Picture.findOneAndDelete({ _id: id })
-        // console.log(picture)
+        const picture = await Picture.findOne({ _id: id })
         if (!picture)
-            res.status(404).send()
+            return res.status(404).send()
+        await picture.remove()
         // connection.gfsPicture.remove({filename: picture.file, root:"pictures"})
-        connection.gfsPicture.remove({_id:picture.file, root:"pictures"})
+        // connection.gfsPicture.remove({_id:picture.file, root:"pictures"})
 
         res.status(200).send(picture)
     } catch (error) {
