@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const PictureSlider = require("./PictureSlider");
+const Video = require("./video");
 
 const videosetSchema = new mongoose.Schema({
     name:{
@@ -38,6 +40,17 @@ videosetSchema.virtual('picturesliders',{
     ref:'PictureSlider',
     localField:'_id',
     foreignField:'owner'
+})
+videosetSchema.pre('remove', async (next)=>{
+    const videoset = this
+    await Video.deleteMany({
+        owner: videoset._id
+    })
+    await PictureSlider.deleteMany({
+        owner: videoset._id
+    })
+    next()
+
 })
 const Videoset= new mongoose.model('Videoset',videosetSchema);
 module.exports = Videoset;
