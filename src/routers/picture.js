@@ -13,6 +13,7 @@ router.post('/picture/upload/:id', connection.uploadPicture.any("picturefile"),a
         res.status(201).send(picture)
     }
     catch (err) {
+        console.log(err)
         res.status(400).send(err);
     }
 })
@@ -25,6 +26,7 @@ router.post('/picture', authUser, authAdmin, authVideoset, async (req, res) => {
        await picture.save()
        res.status(201).send(picture)
    } catch (error) {
+       
        res.status(400).send(error)
    }
 })
@@ -47,7 +49,7 @@ router.delete('/picture', authUser, authAdmin, async (req, res) => {
         const picture = await Picture.findOneAndDelete({ _id: id })
         if (!picture)
             res.status(404).send()
-        connection.gfsPicture.remove({filename: picture.file.filename, root:"pictures"})
+        connection.gfsPicture.remove({filename: picture.file, root:"pictures"})
         res.status(200).send(picture)
     } catch (error) {
         res.status(500).send()

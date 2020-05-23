@@ -4,6 +4,7 @@ const authUser = require('../middleware/authUser')
 const authAdmin = require('../middleware/authAdmin')
 const authMainAdmin = require('../middleware/authMainAdmin')
 const authSubcategory = require('../middleware/authSubcategory')
+const authVideoset = require('../middleware/authVideoset')
 const router = new Router()
 
 router.post('/videoset',authUser, authAdmin, authSubcategory, async (req, res) => {
@@ -54,7 +55,7 @@ router.get('/videoset/:id', async (req,res) =>{
 })
 
 
-router.patch('/videosets', authUser, authAdmin,authMainAdmin, async (req, res) => {
+router.patch('/videosets', authUser, authAdmin,authMainAdmin, authVideoset, async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name', 'subtitle','isPublished', 'description','order']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -63,13 +64,8 @@ router.patch('/videosets', authUser, authAdmin,authMainAdmin, async (req, res) =
     }
 
     try {
-        const videoset = await Videoset.findOne({
-            _id: req.query.id
-        })
-
-        if (!videoset)
-            return res.status(404).send()
-
+        const {videoset} = req
+        
         updates.forEach((update) => videoset[update] = req.body[update])
         await videoset.save()
 
