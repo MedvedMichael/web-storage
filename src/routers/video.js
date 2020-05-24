@@ -39,10 +39,10 @@ router.post('/video', authUser,authAdmin,authVideosContainer, async (req, res) =
 
 router.get('/videos', authVideosContainer, async (req, res) => {
     try {
-        await req.videoset.populate({
+        await req.videosContainer.populate({
             path:'videos'
         }).execPopulate()
-        res.status(200).send(req.videoset.videos)
+        res.status(200).send(req.videosContainer.videos)
     } catch (error) {
         res.status(500).send(error)
     }
