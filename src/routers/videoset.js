@@ -57,7 +57,7 @@ router.get('/videoset/:id', async (req,res) =>{
 
 router.patch('/videosets', authUser, authAdmin,authMainAdmin, authVideoset, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name', 'subtitle','isPublished', 'description','order']
+    const allowedUpdates = ['name','isPublished','order']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
     if (!isValidOperation) {
         return res.status(400).send({ error: 'Invalid updates' })
@@ -79,9 +79,11 @@ router.patch('/videosets', authUser, authAdmin,authMainAdmin, authVideoset, asyn
 router.delete('/videoset',authUser,authAdmin,async (req,res)=>{
     const id = req.query.id
     try {
-        const videoset = await Videoset.findOneAndDelete({_id: id});
+        const videoset = await Videoset.findOne({_id: id});
         if(!videoset)
             res.status(400).send()
+        
+        await videoset.remove()
         res.status(201).send(videoset)
     }
     catch (err) {

@@ -12,13 +12,14 @@ router.post('/categories', authUser, authMainAdmin, async (req, res) => {
         await category.save()
         res.status(201).send(category)
     } catch (error) {
+        console.log(error)
         res.status(400).send()
     }
 })
 
 router.patch('/categories', authUser, authMainAdmin, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name','isPublished']
+    const allowedUpdates = ['name', 'isPublished']
 
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
     if (!isValidOperation) {
@@ -59,28 +60,42 @@ router.get('/categories', async (req, res) => {
 })
 
 
-router.get('/categories/:id', async (req,res)=>{
-    try{
+router.get('/categories/:id', async (req, res) => {
+    try {
         // console.log(req.params)
-        const category = await Category.findOne({_id:req.params.id})
-        if(!category)
-         res.sendStatus(404)
+        const category = await Category.findOne({ _id: req.params.id })
+        if (!category)
+            res.sendStatus(404)
         res.status(200).send(category)
-    } catch(error){
+    } catch (error) {
         res.status(500).send()
     }
 })
 
 
-router.get('/categoriesall', authUser, authMainAdmin, async (req,res)=>{
+router.get('/categoriesall', authUser, authMainAdmin, async (req, res) => {
 
     try {
         const categories = await Category.find({})
         res.status(200).send(categories)
     } catch (error) {
-        res.status(500).send()   
+        res.status(500).send()
     }
 })
+
+router.delete('/categories', authUser, authMainAdmin, async (req, res) => {
+    try {
+        const category = await Category.findOne({ _id: req.query.id })
+        if (!category)
+            return res.status(404).send()
+        await category.remove()
+        res.status(200).send(category)
+    }
+    catch (error) {
+        res.status(400).send(error);
+    }
+})
+
 
 
 module.exports = router

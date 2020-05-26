@@ -6,7 +6,7 @@ const authAdmin = require('../middleware/authAdmin')
 const authMainAdmin = require('../middleware/authMainAdmin')
 const router = new Router()
 
-router.post('/subcategories',authUser, authAdmin, authMainAdmin, authCategory, async (req, res) => {
+router.post('/subcategories', authUser, authAdmin, authMainAdmin, authCategory, async (req, res) => {
     const subcategory = new Subcategory({
         ...req.body,
         owner: req.category._id
@@ -14,10 +14,10 @@ router.post('/subcategories',authUser, authAdmin, authMainAdmin, authCategory, a
 
     try {
         const testSubcategory = await Subcategory.findOne({})
-        if(testSubcategory && testSubcategory.type !== subcategory.type)
+        if (testSubcategory && testSubcategory.type !== subcategory.type)
             return res.status(400).send(`Wrong type of subcategory, needs ${testSubcategory.type}`)
-        
-        if(!testSubcategory){
+
+        if (!testSubcategory) {
             req.category.subcategoriesType = subcategory.type
             await req.category.save()
         }
@@ -29,12 +29,12 @@ router.post('/subcategories',authUser, authAdmin, authMainAdmin, authCategory, a
     }
 })
 
-router.get('/subcategories/:id', async (req,res)=>{
+router.get('/subcategories/:id', async (req, res) => {
     try {
-        const subcategory = await Subcategory.findOne({_id:req.params.id})
-        if(!subcategory)
+        const subcategory = await Subcategory.findOne({ _id: req.params.id })
+        if (!subcategory)
             res.status(404).send()
-        
+
         res.status(200).send(subcategory)
     } catch (error) {
         res.status(500).send()
@@ -63,9 +63,9 @@ router.get('/subcategories', authCategory, async (req, res) => {
 })
 
 
-router.patch('/subcategories', authUser, authAdmin,authMainAdmin, async (req, res) => {
+router.patch('/subcategories', authUser, authAdmin, authMainAdmin, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name', 'subtitle','isPublished', 'description']
+    const allowedUpdates = ['name', 'subtitle', 'isPublished', 'description']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
     if (!isValidOperation) {
         return res.status(400).send({ error: 'Invalid updates' })
@@ -82,11 +82,27 @@ router.patch('/subcategories', authUser, authAdmin,authMainAdmin, async (req, re
         updates.forEach((update) => subcategory[update] = req.body[update])
         await subcategory.save()
 
-        
+
         res.status(200).send(subcategory)
     } catch (error) {
         res.status(500).send(error)
     }
 })
+
+
+router.delete('/subcategories', authUser, authMainAdmin, async (req, res) => {
+    try {
+        const subcategory = await Subcategory.findOne({ _id: req.query.id })
+        if (!subcategory)
+            return res.status(404).send()
+        await subcategory.remove()
+        res.status(200).send(subcategory)
+    }
+    catch (error) {
+        res.status(400).send(error);
+    }
+})
+
+
 
 module.exports = router

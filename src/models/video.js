@@ -15,7 +15,6 @@ const videoSchema = new mongoose.Schema({
     },
     file:{
         type: Object,
-        required: true
     },
     owner:{
         type:mongoose.Schema.Types.ObjectId,

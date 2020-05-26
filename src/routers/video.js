@@ -10,7 +10,7 @@ const router = new express.Router()
     //
 router.post('/video/upload/:id', connection.uploadVideo.any("videofile"),async (req,res)=>{
     // console.log(connection.gfsVideo)
-    // console.log(req.files[0].id)
+    console.log(req.files[0])
     try{
         const video = await Video.findOne({_id:req.params.id})
         video.file = req.files[0].id
@@ -18,6 +18,7 @@ router.post('/video/upload/:id', connection.uploadVideo.any("videofile"),async (
         res.status(201).send(video)
     }
     catch (err) {
+        console.log(err)
         res.status(400).send(err);
     }
 })
@@ -31,6 +32,7 @@ router.post('/video', authUser,authAdmin,authVideosContainer, async (req, res) =
         await video.save()
         res.status(201).send(video)
     } catch (error) {
+        console.log(error)
         res.status(400).send(error)
     }
     
@@ -96,7 +98,7 @@ router.get('/video/:id', async (req,res)=>{
                 }
             })
         }else{
-            res.status(201).send(video.source)
+            res.status(201).send(video.file)
         }
 
     } catch (error) {
