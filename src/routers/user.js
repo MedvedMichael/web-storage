@@ -134,19 +134,26 @@ router.patch('/users', authUser,authMainAdmin, async (req, res) => {
     if (!user)
         return res.status(404).send()
 
-    if(!req.body.status)
-        return res.status(400).send()
-    
-    user.status = req.body.status
-    user.ban = req.body.ban
+    // if(!req.body.status)
+        // return res.status(400).send()
+    const { status, ban } = req.body
+    if (status)
+        user.status = status
+    if (ban !== undefined || ban !== null)
+        user.ban = ban
+
+    if(user.ban === undefined)
+    user.ban = false
+
     try {
         await user.save()
         res.status(200).send(user)
-        fs.appendFile(__dirname+"../../log.txt",`Action: PATCH,user:${user.name}  Type: user \n`,(err)=>{
-            if(err)
+        fs.appendFile(__dirname + "../../log.txt", `Action: PATCH,user:${user.name}  Type: user \n`, (err) => {
+            if (err)
                 console.log(err)
         })
     } catch (error) {
+        console.log(error)
         res.status(500).send()
     }
 })
