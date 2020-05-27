@@ -107,7 +107,7 @@ router.get('/video/:id', async (req,res)=>{
                 }
             })
         }else{
-            res.status(201).send(video.file)
+            res.status(200).send(video)
         }
         fs.appendFile(__dirname+"/../log.txt",`Action: GET, name:${video.name}, Type: video \n`,(err)=>{
             if(err)

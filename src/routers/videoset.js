@@ -69,7 +69,7 @@ router.get('/videoset/:id', async (req,res) =>{
 
 router.patch('/videosets', authUser, authAdmin,authMainAdmin, authVideoset, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name','isPublished','order']
+    const allowedUpdates = ['name','isPublished','order','owner']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
     if (!isValidOperation) {
         return res.status(400).send({ error: 'Invalid updates' })

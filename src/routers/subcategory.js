@@ -49,14 +49,14 @@ router.get('/subcategories/:id', async (req, res) => {
     }
 })
 
-// router.get('/subcategories', async (req,res)=>{
-//     try {
-//         const subcategories = await Subcategory.find({})
-//         res.status(200).send(subcategories)
-//     } catch (error) {
-//         res.status(500).send()
-//     }
-// })
+router.get('/subcategoriesall', async (req,res)=>{
+    try {
+        const subcategories = await Subcategory.find({})
+        res.status(200).send(subcategories)
+    } catch (error) {
+        res.status(500).send()
+    }
+})
 
 router.get('/subcategories', authCategory, async (req, res) => {
     try {
