@@ -15,7 +15,7 @@ router.post('/picture-slider',authUser, authAdmin, authVideoset, async (req, res
     try {
         await pictureSlider.save()
         res.status(201).send(pictureSlider)
-        fs.appendFile(__dirname+"../../log.txt",`Action: POST,  Type: picture-slider,user: ${req.user.name},videosetID:${req.videoset._id} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: POST,  Type: picture-slider,user: ${req.user.name},videosetID:${req.videoset._id} \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -39,7 +39,7 @@ router.get('/picture-sliders', authVideoset, async (req, res) => {
             path: 'picturesliders'
         }).execPopulate()
         res.status(200).send(req.videoset.picturesliders)
-        fs.appendFile(__dirname+"../../log.txt",`Action: GET,  Type: picture-sliders, videosetID:${req.videoset._id} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET,  Type: picture-sliders, videosetID:${req.videoset._id} \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -56,7 +56,7 @@ router.get('/picture-slider/:id', async (req,res) =>{
             return res.status(404).send()
 
         res.status(200).send(pictureslider)
-        fs.appendFile(__dirname+"../../log.txt",`Action: GET,  Type: picture-slider,id:${pictureslider._id} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET,  Type: picture-slider,id:${pictureslider._id} \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -88,7 +88,7 @@ router.patch('/picture-sliders', authUser, authAdmin,authMainAdmin, async (req, 
 
         res.status(200).send(pictureSlider)
 
-        fs.appendFile(__dirname+"../../log.txt",`Action: PATCH,user:${req.user.name},  Type: picture-slider,id:${pictureSlider._id} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: PATCH,user:${req.user.name},  Type: picture-slider,id:${pictureSlider._id} \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -106,7 +106,7 @@ router.delete('/picture-slider',authUser,authAdmin,async (req,res)=>{
 
         await pictureSlider.remove()
         res.status(200).send(pictureSlider)
-        fs.appendFile(__dirname+"../../log.txt",`Action: DELETE,user:${req.user.name},  Type: picture-slider,id:${pictureSlider._id} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: DELETE,user:${req.user.name},  Type: picture-slider,id:${pictureSlider._id} \n`,(err)=>{
             if(err)
                 console.log(err)
         })

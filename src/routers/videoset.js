@@ -16,7 +16,7 @@ router.post('/videoset',authUser, authAdmin, authSubcategory, async (req, res) =
     try {
         await videoset.save()
         res.status(201).send(videoset)
-        fs.appendFile(__dirname+"../../log.txt",`Action: POST,user:${req.user.name},name:${videoset.name}, Type: videoset  \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: POST, Type: videoset, user:${req.user.name}, name:${videoset.name}  \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -40,7 +40,7 @@ router.get('/videosets', authSubcategory, async (req, res) => {
             path: 'videosets'
         }).execPopulate()
         res.status(200).send(req.subcategory.videosets)
-        fs.appendFile(__dirname+"../../log.txt",`Action: GET,subcategoryID:${req.subcategory._id}, Type: videoset  \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET ,Type: videoset, subcategoryID:${req.subcategory._id} \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -57,7 +57,7 @@ router.get('/videoset/:id', async (req,res) =>{
             return res.status(404).send()
         
         res.status(200).send(videoset)
-        fs.appendFile(__dirname+"../../log.txt",`Action: GET,name:${videoset.name}, Type: videoset  \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET, Type: videoset, name:${videoset.name} \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -83,7 +83,7 @@ router.patch('/videosets', authUser, authAdmin,authMainAdmin, authVideoset, asyn
 
 
         res.status(200).send(videoset)
-        fs.appendFile(__dirname+"../../log.txt",`Action: PATCH,user:${req.user.name},name:${videoset.name}, Type: videoset  \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: PATCH, Type: videoset, user:${req.user.name},name:${videoset.name} \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -101,7 +101,7 @@ router.delete('/videoset',authUser,authAdmin,async (req,res)=>{
         
         await videoset.remove()
         res.status(201).send(videoset)
-        fs.appendFile(__dirname+"../../log.txt",`Action: DELETE,user:${req.user.name},name:${videoset.name}, Type: videoset  \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: DELETE, Type: videoset, user:${req.user.name},name:${videoset.name}  \n`,(err)=>{
             if(err)
                 console.log(err)
         })

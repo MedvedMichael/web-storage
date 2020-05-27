@@ -15,7 +15,7 @@ router.post('/video/upload/:id', connection.uploadVideo.any("videofile"),async (
         video.file = req.files[0].id
         await video.save()
         res.status(201).send(video)
-        fs.appendFile(__dirname+"../../log.txt",`Action: POST, name:${video.name}, Type: video \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: POST, name:${video.name}, Type: video \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -34,7 +34,7 @@ router.post('/video', authUser,authAdmin,authVideosContainer, async (req, res) =
     try {
         await video.save()
         res.status(201).send(video)
-        fs.appendFile(__dirname+"../../log.txt",`Action: POST,user:${req.user.name}, name:${video.name}, Type: video \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: POST,user:${req.user.name}, name:${video.name}, Type: video \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -52,7 +52,7 @@ router.get('/videos', authVideosContainer, async (req, res) => {
             path:'videos'
         }).execPopulate()
         res.status(200).send(req.videosContainer.videos)
-        fs.appendFile(__dirname+"../../log.txt",`Action: GET, videosContainerID:${req.videosContainer._id}, Type: video \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET, videosContainerID:${req.videosContainer._id}, Type: video \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -109,7 +109,7 @@ router.get('/video/:id', async (req,res)=>{
         }else{
             res.status(201).send(video.file)
         }
-        fs.appendFile(__dirname+"../../log.txt",`Action: GET, name:${video.name}, Type: video \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET, name:${video.name}, Type: video \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -129,7 +129,7 @@ router.delete('/video', authUser,authAdmin, async (req, res) => {
         await video.remove()
 
         res.status(200).send(video)
-        fs.appendFile(__dirname+"../../log.txt",`Action: DELETE,user:${req.user.name} name:${video.name}, Type: video \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: DELETE,user:${req.user.name} name:${video.name}, Type: video \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -142,7 +142,7 @@ router.get('/videosall', authUser, authMainAdmin, async (req,res)=>{
     try {
         const videos = await Video.find({})
         res.status(200).send(videos)
-        fs.appendFile(__dirname+"../../log.txt",`Action: GET, user:${req.user.name}, Type: video \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET, user:${req.user.name}, Type: video \n`,(err)=>{
             if(err)
                 console.log(err)
         })

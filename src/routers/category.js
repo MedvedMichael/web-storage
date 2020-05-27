@@ -11,7 +11,7 @@ router.post('/categories', authUser, authMainAdmin, async (req, res) => {
     try {
         await category.save()
         res.status(201).send(category)
-        fs.appendFile(__dirname+"../../log.txt",`Action: POST, user: ${req.user.name}, Type: category, name: ${category.name} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: POST, user: ${req.user.name}, Type: category, name: ${category.name} \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -41,7 +41,7 @@ router.patch('/categories', authUser, authMainAdmin, async (req, res) => {
         updates.forEach((update) => { category[update] = req.body[update] })
         await category.save()
         res.status(200).send(category)
-        fs.appendFile(__dirname+"../../log.txt",`Action: PATCH, user: ${req.user.name}, Type: category, name: ${category.name}  \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: PATCH, user: ${req.user.name}, Type: category, name: ${category.name}  \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -64,7 +64,7 @@ router.get('/categories', async (req, res) => {
     try {
         const categories = await Category.find({ isPublished: true })
         res.status(200).send(categories)
-        fs.appendFile(__dirname+"../../log.txt",`Action: GET  Type: categories isPublished: true \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET  Type: categories isPublished: true \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -81,7 +81,7 @@ router.get('/categories/:id', async (req, res) => {
         if (!category)
             res.sendStatus(404)
         res.status(200).send(category)
-        fs.appendFile(__dirname+"../../log.txt",`Action: POST,  Type: category, name: ${category.name} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: POST,  Type: category, name: ${category.name} \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -96,7 +96,7 @@ router.get('/categoriesall', authUser, authMainAdmin, async (req, res) => {
     try {
         const categories = await Category.find({})
         res.status(200).send(categories)
-        fs.appendFile(__dirname+"../../log.txt",`Action: GET, user: ${req.user.name}, Type: categoriesAll \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET, user: ${req.user.name}, Type: categoriesAll \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -112,7 +112,7 @@ router.delete('/categories', authUser, authMainAdmin, async (req, res) => {
             return res.status(404).send()
         await category.remove()
         res.status(200).send(category)
-        fs.appendFile(__dirname+"../../log.txt",`Action: DELETE, user: ${req.user.name}, Type: category, name: ${category.name} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: DELETE, user: ${req.user.name}, Type: category, name: ${category.name} \n`,(err)=>{
             if(err)
                 console.log(err)
         })

@@ -24,7 +24,7 @@ router.post('/subcategories', authUser, authAdmin, authMainAdmin, authCategory, 
 
         await subcategory.save()
         res.status(201).send(subcategory)
-        fs.appendFile(__dirname+"../../log.txt",`Action: POST,user:${req.user.name}  Type: subcategory,name:${subcategory.name} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: POST,user:${req.user.name}  Type: subcategory,name:${subcategory.name} \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -40,7 +40,7 @@ router.get('/subcategories/:id', async (req, res) => {
             res.status(404).send()
 
         res.status(200).send(subcategory)
-        fs.appendFile(__dirname+"../../log.txt",`Action: GET,  Type: subcategory,name:${subcategory.name} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET,  Type: subcategory,name:${subcategory.name} \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -64,7 +64,7 @@ router.get('/subcategories', authCategory, async (req, res) => {
             path: 'subcategories'
         }).execPopulate()
         res.status(200).send(req.category.subcategories)
-        fs.appendFile(__dirname+"../../log.txt",`Action: GET, Type: subcategories,categoryID:${req.category._id} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET, Type: subcategories,categoryID:${req.category._id} \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -96,7 +96,7 @@ router.patch('/subcategories', authUser, authMainAdmin, async (req, res) => {
 
 
         res.status(200).send(subcategory)
-        fs.appendFile(__dirname+"../../log.txt",`Action: PATCH,user:${req.user.name}, Type: subcategory,name:${subcategory.name} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: PATCH,user:${req.user.name}, Type: subcategory,name:${subcategory.name} \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -113,7 +113,7 @@ router.delete('/subcategories', authUser, authMainAdmin, async (req, res) => {
             return res.status(404).send()
         await subcategory.remove()
         res.status(200).send(subcategory)
-        fs.appendFile(__dirname+"../../log.txt",`Action: DELETE,user:${req.user.name}  Type: subcategory, name:${subcategory.name} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: DELETE,user:${req.user.name}  Type: subcategory, name:${subcategory.name} \n`,(err)=>{
             if(err)
                 console.log(err)
         })

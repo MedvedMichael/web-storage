@@ -13,7 +13,7 @@ router.post('/users', async (req, res) => {
         await user.save()
         const token = await user.generateAuthToken()
         res.status(201).send({ user, token })
-        fs.appendFile(__dirname+"../../log.txt",`Action: POST,user:${user.name}  Type: user \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: POST,user:${user.name}  Type: user \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -29,7 +29,7 @@ router.post('/users/login', async (req, res) => {
         refreshTokens(user)
         await user.save()
         res.status(200).send({ user, token })
-        fs.appendFile(__dirname+"../../log.txt",`Action: POST,user:${user.name}  Type: userLogin \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: POST,user:${user.name}  Type: userLogin \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -55,7 +55,7 @@ router.post('/users/logout', authUser, async (req, res) => {
         req.user.tokens = req.user.tokens.filter(token => token.token !== req.token)
         await res.user.save()
         res.send()
-        fs.appendFile(__dirname+"../../log.txt",`Action: POST,user:${req.user.name}  Type: userLOGOUT \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: POST,user:${req.user.name}  Type: userLOGOUT \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -69,7 +69,7 @@ router.post('/users/logoutall', authUser, async (req, res) => {
         req.user.tokens = []
         await req.user.save()
         res.status(200).send()
-        fs.appendFile(__dirname+"../../log.txt",`Action: POST,user:${req.user.name}  Type: userLOGOUTALL \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: POST,user:${req.user.name}  Type: userLOGOUTALL \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -80,7 +80,7 @@ router.post('/users/logoutall', authUser, async (req, res) => {
 
 router.get('/users/me', authUser, async (req, res) => {
     res.send(req.user)
-    fs.appendFile(__dirname+"../../log.txt",`Action: GET,user:${req.user.name}  Type: user \n`,(err)=>{
+    fs.appendFile(__dirname+"/../log.txt",`Action: GET,user:${req.user.name}  Type: user \n`,(err)=>{
         if(err)
             console.log(err)
     })
@@ -93,7 +93,7 @@ router.get('/usersall',authUser,authMainAdmin, async (req,res)=>{
           res.status(404).send()
 
         res.status(200).send(users)
-        fs.appendFile(__dirname+"../../log.txt",`Action: GET,user:${req.user.name}  Type: usersall \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET,user:${req.user.name}  Type: usersall \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -118,7 +118,7 @@ router.patch('/users/me', authUser, async (req, res) => {
         
         await req.user.save()
         res.status(200).send(req.user)
-        fs.appendFile(__dirname+"../../log.txt",`Action: PATCH,user:${req.user.name}  Type: user \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: PATCH,user:${req.user.name}  Type: user \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -148,7 +148,7 @@ router.patch('/users', authUser,authMainAdmin, async (req, res) => {
     try {
         await user.save()
         res.status(200).send(user)
-        fs.appendFile(__dirname + "../../log.txt", `Action: PATCH,user:${user.name}  Type: user \n`, (err) => {
+        fs.appendFile(__dirname + "/../log.txt", `Action: PATCH,user:${user.name}  Type: user \n`, (err) => {
             if (err)
                 console.log(err)
         })
@@ -164,7 +164,7 @@ router.delete('/users/me', authUser, async (req, res) => {
     try {
         await req.user.remove()
         res.status(200).send()
-        fs.appendFile(__dirname+"../../log.txt",`Action: DELETE,user:${req.user.name}  Type: user \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: DELETE,user:${req.user.name}  Type: user \n`,(err)=>{
             if(err)
                 console.log(err)
         })

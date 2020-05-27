@@ -15,7 +15,7 @@ router.post('/videos-container',authUser, authAdmin, authVideoset, async (req, r
     try {
         await videosContainer.save()
         res.status(201).send(videosContainer)
-        fs.appendFile(__dirname+"../../log.txt",`Action: POST,user:${req.user.name} ID:${videosContainer._id}, Type: video-container  \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: POST,user:${req.user.name} ID:${videosContainer._id}, Type: video-container  \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -31,7 +31,7 @@ router.get('/video-container/:id', async (req,res) =>{
             return res.status(404).send()
         
         res.status(200).send(videosContainer)
-        fs.appendFile(__dirname+"../../log.txt",`Action: GET, ID:${videosContainer._id}, Type: video-container  \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET, ID:${videosContainer._id}, Type: video-container  \n`,(err)=>{
             if(err)
                 console.log(err)
         })
@@ -48,7 +48,7 @@ router.delete('/videos-container',authUser,authAdmin,async (req,res)=>{
             res.status(404).send()
         await videosContainer.remove()
         res.status(201).send(videosContainer)
-        fs.appendFile(__dirname+"../../log.txt",`Action: DELETE,user:${req.user.name}, ID:${videosContainer._id}, Type: video-container  \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: DELETE,user:${req.user.name}, ID:${videosContainer._id}, Type: video-container  \n`,(err)=>{
             if(err)
                 console.log(err)
         })
