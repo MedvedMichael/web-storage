@@ -8,6 +8,7 @@ const subcategoryRouter = require('./routers/subcategory')
 const userRouter = require('./routers/user')
 const pictureRouter = require('./routers/picture')
 const pictureSliderRouter = require('./routers/picture-slider')
+const fs = require('fs')
 //TEMPORARY
 const bodyParser = require('body-parser')
 
@@ -22,6 +23,14 @@ app.get('/',(req,res)=>{
     //res.status(200).send("Okay")
 })
 
+const path =__dirname+'/log.txt'
+
+fs.access(path, fs.F_OK, async (err) => {
+    if(err) {
+        console.log("as")
+        fs.writeFileSync(path, "init")
+    }
+})
 app.use(express.json())
 app.use('/api',pictureSliderRouter)
 app.use('/api',videosetRouter)
