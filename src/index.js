@@ -16,12 +16,6 @@ const PORT = process.env.PORT
 const app = express()
 app.use(bodyParser.json());
 app.use(cors())
-app.set('view engine','ejs');
-app.get('/',(req,res)=>{
-    // TEMPORARY!!!
-    res.render('index')
-    //res.status(200).send("Okay")
-})
 
 const path =__dirname+'/log.txt'
 
