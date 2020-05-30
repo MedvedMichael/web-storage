@@ -8,6 +8,7 @@ const subcategoryRouter = require('./routers/subcategory')
 const userRouter = require('./routers/user')
 const pictureRouter = require('./routers/picture')
 const pictureSliderRouter = require('./routers/picture-slider')
+const logoRouter = require('./routers/logo')
 const fs = require('fs')
 //TEMPORARY
 const bodyParser = require('body-parser')
@@ -21,7 +22,6 @@ const path =__dirname+'/log.txt'
 
 fs.access(path, fs.F_OK, async (err) => {
     if(err) {
-        console.log("as")
         fs.writeFileSync(path, "init")
     }
 })
@@ -34,7 +34,7 @@ app.use('/api',subcategoryRouter)
 app.use('/api',videoRouter)
 app.use('/api',userRouter)
 app.use('/api',pictureRouter)
-
+app.use('/api',logoRouter)
 app.listen(PORT,()=>{
     console.log("Listening at " + PORT)
 })
