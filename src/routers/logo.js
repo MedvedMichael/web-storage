@@ -7,12 +7,14 @@ const authAdmin = require('../middleware/authAdmin')
 const authVideoset = require('../middleware/authVideoset')
 const router = new express.Router()
 const fs = require('fs')
-router.post('/logo/upload/:id', connection.uploadLogo.any("logofile"),async (req,res)=>{
-    try{
-        let logo = await Logo.findOneAndUpdate({_id:req.params.id},{file:req.files[0].id})
+router.post('/logo/upload/:id', connection.uploadLogo.any("logofile"), async (req, res) => {
+    try {
+        const logo = await Logo.findOne({ _id: req.params.id })
+        logo.file = req.files[0].id
+        await logo.save()
         res.status(201).send(logo)
-        fs.appendFile(__dirname+"/../log.txt",`Action: POST,  Type: logo\n`,(err)=>{
-            if(err)
+        fs.appendFile(__dirname + "/../log.txt", `Action: POST,  Type: logo\n`, (err) => {
+            if (err)
                 console.log(err)
         })
     }
@@ -21,16 +23,26 @@ router.post('/logo/upload/:id', connection.uploadLogo.any("logofile"),async (req
         res.status(400).send(err);
     }
 })
-router.post('/logo' , authUser, authAdmin, authVideoset, async (req, res) => {
-    const logo  = new Logo({
+router.post('/logo', authUser, authAdmin, authVideoset, async (req, res) => {
+    const previousLogo = await Logo.findOne({owner:req.videoset._id})
+    const logo = new Logo({
         ...req.body,
         owner: req.videoset._id
     })
     try {
+        if(previousLogo)
+            await previousLogo.remove()
+        
         await logo.save()
+        req.videoset.hasLogo = true
+        await req.videoset.save()
+
+        
+        
+        
         res.status(201).send(logo)
-        fs.appendFile(__dirname+"/../log.txt",`Action: POST, user:${req.user.name} Type: Logo \n`,(err)=>{
-            if(err)
+        fs.appendFile(__dirname + "/../log.txt", `Action: POST, user:${req.user.name} Type: Logo \n`, (err) => {
+            if (err)
                 console.log(err)
         })
     } catch (error) {
@@ -48,8 +60,8 @@ router.delete('/logo', authUser, authAdmin, async (req, res) => {
             return res.status(404).send()
         await logo.remove()
 
-        fs.appendFile(__dirname+"/../log.txt",`Action: DELETE, user:${req.user.name}, Type: logo \n`,(err)=>{
-            if(err)
+        fs.appendFile(__dirname + "/../log.txt", `Action: DELETE, user:${req.user.name}, Type: logo \n`, (err) => {
+            if (err)
                 console.log(err)
         })
         res.status(200).send(logo)
@@ -58,17 +70,18 @@ router.delete('/logo', authUser, authAdmin, async (req, res) => {
     }
 })
 
-router.get('/logo/:id',async(req,res)=>{
+router.get('/logo', authVideoset, async (req, res) => {
     try {
-        const logo = await Logo.findOne({_id:req.params.id})
-        if(!logo)
+        const logo = await Logo.findOne({ owner: req.videoset._id })
+        if (!logo)
             return res.status(404).send()
-        connection.gfsLogo.createReadStream({_id: logo.file}).pipe(res);
-        fs.appendFile(__dirname+"/../log.txt",`Action: GET,  Type: logo \n`,(err)=>{
-            if(err)
+
+        connection.gfsLogo.createReadStream({ _id: logo.file }).pipe(res);
+        fs.appendFile(__dirname + "/../log.txt", `Action: GET,  Type: logo \n`, (err) => {
+            if (err)
                 console.log(err)
         })
-    }catch(err){
+    } catch (err) {
         return res.status(404).send()
     }
 })

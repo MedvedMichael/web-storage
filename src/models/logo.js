@@ -17,13 +17,14 @@ const logoSchema = new mongoose.Schema({
 })
 logoSchema.pre('remove', async function (next){
     const logo = this
-    if(logo.source === 'local')
+    if(logo.source === 'local'){
         try{
             await connection.gfsLogo.remove({ _id: logo.file, root: "logos" })
         }
         catch(error){
             console.log(error)
         }
+    }
     next()
 })
 

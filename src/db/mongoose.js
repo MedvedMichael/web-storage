@@ -22,7 +22,7 @@ let connection = {
             gfsLogo = Grid(conn.db, mongoose.mongo);
             gfsVideo.collection('videos')
             gfsPicture.collection('pictures')
-            gfsPicture.collection('logos')
+            gfsLogo.collection('logos')
             connection.gfsLogo = gfsLogo;
             connection.gfsVideo = gfsVideo;
             connection.gfsPicture = gfsPicture;

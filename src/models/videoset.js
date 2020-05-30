@@ -14,6 +14,11 @@ const videosetSchema = new mongoose.Schema({
         required: true,
         default: true
     },
+    hasLogo: {
+        type:Boolean,
+        required:true,
+        default:false
+    },
     order: {
         type: Array
     },
@@ -52,7 +57,7 @@ videosetSchema.pre('remove', async function (next) {
             await videosContainers[i].remove()
         for (let i = 0; i < pictureSliders.length; i++)
             await pictureSliders[i].remove()
-        logo.remove();
+        if (logo) await logo.remove();
     }
     catch (error) {
         console.log(error)

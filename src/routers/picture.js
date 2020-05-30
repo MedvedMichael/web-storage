@@ -9,7 +9,7 @@ const router = new express.Router()
 const fs = require('fs')
 router.post('/picture/upload/:id', connection.uploadPicture.any("picturefile"),async (req,res)=>{
     try{
-        let picture = await Picture.findOneAndUpdate({_id:req.params.id},{file:req.files[0].id})
+        const picture = await Picture.findOneAndUpdate({_id:req.params.id},{file:req.files[0].id})
         res.status(201).send(picture)
         fs.appendFile(__dirname+"/../log.txt",`Action: POST,  Type: picture, name: ${picture.name} \n`,(err)=>{
               if(err)
@@ -17,7 +17,6 @@ router.post('/picture/upload/:id', connection.uploadPicture.any("picturefile"),a
         })
     }
     catch (err) {
-        console.log(err)
         res.status(400).send(err);
     }
 })
@@ -77,7 +76,7 @@ router.get('/picturesall', authUser, authAdmin, async (req,res)=>{
     try {
         const pictures = await Picture.find({})
         res.status(200).send(pictures)
-        fs.appendFile(__dirname+"/../log.txt",`Action: GET,  Type: picturesall,user:${req.user.name} \n`,(err)=>{
+        fs.appendFile(__dirname+"/../log.txt",`Action: GET, Type: picturesall, user:${req.user.name} \n`,(err)=>{
                       if(err)
                            console.log(err)
                 })
