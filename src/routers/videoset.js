@@ -5,6 +5,7 @@ const authAdmin = require('../middleware/authAdmin')
 const authMainAdmin = require('../middleware/authMainAdmin')
 const authSubcategory = require('../middleware/authSubcategory')
 const authVideoset = require('../middleware/authVideoset')
+const Category = require('../models/category')
 const router = new Router()
 const fs = require('fs')
 router.post('/videoset',authUser, authAdmin, authSubcategory, async (req, res) => {
@@ -16,6 +17,13 @@ router.post('/videoset',authUser, authAdmin, authSubcategory, async (req, res) =
     try {
         await videoset.save()
         res.status(201).send(videoset)
+        let category = await Category.findOne({_id:req.subcategory.owner})
+        let arr = category.lastvideosets
+        arr.unshift(videoset._id)
+        while(arr.length>10){
+            arr.pop();
+        }
+        await Category.findOneAndUpdate({_id:category._id},{lastvideosets:arr});
         fs.appendFile(__dirname+"/../log.txt",`Action: POST, Type: videoset, user:${req.user.name}, name:${videoset.name}  \n`,(err)=>{
             if(err)
                 console.log(err)

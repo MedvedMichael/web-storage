@@ -16,6 +16,9 @@ const categorySchema = new mongoose.Schema({
         type:Boolean,
         required:true,
         default:true
+    },
+    lastvideosets:{
+        type:Array
     }
 })
 
