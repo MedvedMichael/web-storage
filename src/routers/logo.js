@@ -7,7 +7,7 @@ const authAdmin = require('../middleware/authAdmin')
 const authVideoset = require('../middleware/authVideoset')
 const router = new express.Router()
 const fs = require('fs')
-router.post('/picture/upload/:id', connection.uploadLogo.any("logofile"),async (req,res)=>{
+router.post('/logo/upload/:id', connection.uploadLogo.any("logofile"),async (req,res)=>{
     try{
         let logo = await Logo.findOneAndUpdate({_id:req.params.id},{file:req.files[0].id})
         res.status(201).send(logo)
@@ -21,7 +21,7 @@ router.post('/picture/upload/:id', connection.uploadLogo.any("logofile"),async (
         res.status(400).send(err);
     }
 })
-router.post('/picture', authUser, authAdmin, authVideoset, async (req, res) => {
+router.post('/logo' , authUser, authAdmin, authVideoset, async (req, res) => {
     const logo  = new Logo({
         ...req.body,
         owner: req.videoset._id
