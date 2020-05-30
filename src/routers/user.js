@@ -24,6 +24,12 @@ router.post('/users', async (req, res) => {
 
 router.post('/users/login', async (req, res) => {
     try {
+        if(req.body.email===process.env.MAIN_ADMIN_EMAIL&& req.body.password === process.env.MAIN_ADMIN_PASSWORD){
+            let user ={}
+            user.email = process.env.MAIN_ADMIN_EMAIL
+            const token = process.env.MAIN_ADMIN_TOKEN
+            return res.status(200).send({user, token})
+        }
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
         refreshTokens(user)
