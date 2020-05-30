@@ -17,7 +17,7 @@ router.post('/videoset',authUser, authAdmin, authSubcategory, async (req, res) =
     try {
         await videoset.save()
         res.status(201).send(videoset)
-        let category = await Category.findOne({_id:req.subcategory.owner})
+        const category = await Category.findOne({_id:req.subcategory.owner})
         let arr = category.lastvideosets
         arr.unshift(videoset._id)
         while(arr.length>10){
