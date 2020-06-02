@@ -32,6 +32,17 @@ router.post('/video', authUser,authAdmin,authVideosContainer, async (req, res) =
         owner: req.videosContainer._id,
     })
     try {
+        const startName = video.name
+        let name = startName
+        let dublicateVideo, increment = 1
+        do{
+            dublicateVideo = await Video.findOne({name:name})
+            if(dublicateVideo){
+                name = startName + '(' + String(increment++) + ')'
+            }
+        }while(dublicateVideo)
+
+        video.name = name
         await video.save()
         res.status(201).send(video)
         fs.appendFile(__dirname+"/../log.txt",`Action: POST,user:${req.user.name}, name:${video.name}, Type: video \n`,(err)=>{
