@@ -52,13 +52,19 @@ router.post('/logo', authUser, authAdmin, authVideoset, async (req, res) => {
 })
 
 
-router.delete('/logo', authUser, authAdmin, async (req, res) => {
-    const id = req.query.id
+router.delete('/logo', authUser, authAdmin, authVideoset, async (req, res) => {
+    // const id = req.query.id
     try {
-        const logo = await Logo.findOne({ _id: id })
-        if (!logo)
+        const logo = await Logo.findOne({ owner: req.videoset._id })
+        if (!logo){
+            req.videoset.hasLogo = false
+            await req.videoset.save()
             return res.status(404).send()
+        }
         await logo.remove()
+
+        req.videoset.hasLogo = false
+        await req.videoset.save()
 
         fs.appendFile(__dirname + "/../log.txt", `Action: DELETE, user:${req.user.name}, Type: logo \n`, (err) => {
             if (err)
