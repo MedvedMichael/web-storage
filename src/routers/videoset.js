@@ -68,11 +68,13 @@ router.get('/videosets', authSubcategory, async (req, res) => {
 router.get('/videosets-last-10', authCategory, async (req, res) => {
     const { lastVideosets } = req.category
     try {
-        const last10Videosets = await Videoset.find({
+        const lastVideosetsFromArray = await Videoset.find({
             _id: {
                 $in: lastVideosets
             }
         })
+        
+        const last10Videosets = lastVideosetsFromArray.reverse().slice(0,10)
         for(let i=0;i<last10Videosets.length;i++){
             const videoset = last10Videosets[i]
             const subcategory = await Subcategory.findOne({ _id: videoset.owner })
@@ -80,7 +82,7 @@ router.get('/videosets-last-10', authCategory, async (req, res) => {
             last10Videosets[i] = {...temp._doc,subcategoryName:subcategory.name}
         }
 
-        res.status(200).send(last10Videosets.slice(0, 10).reverse())
+        res.status(200).send(last10Videosets)
     }
     catch (error) {
         console.log(error)
