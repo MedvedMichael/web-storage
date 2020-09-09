@@ -150,5 +150,47 @@ router.delete('/videoset', authUser, authAdmin, async (req, res) => {
         res.status(400).send(err)
     }
 })
+router.get('/lst10videosets',async (req,res)=>{
+    try {
+        let videosets = await Videoset.find().sort({timestamps: -1}).limit(10)
+        res.status(200).send(videosets)
+    }catch (err) {
+        res.status(404).send(err)
+    }
+})
+//в базе мб надо будет сделать так db.videosets.createIndex({ name: "text", description: "text" })
+router.get('/findvideosets', async ( req,res )=>{
+    try{
+        let names = req.query.name.split(' ')
+        let findedVideosets = []
+        for(let i =0; i< names.length; i++)
+        {
+            let videosets = await Videoset.find({
+                $or: [
+                    {name: {$regex: names[i], $options: "i"}},
+                    {lastname: {$regex: names[i], $options: "i"}},
+                    {middlename: {$regex: names[i], $options: "i"}}
+                ]
+            })
+            for(let j=0;j<videosets.length;j++){
+                let inArr = false;
+                for(let t=0;t<findedVideosets.length;t++){
+                    if(videosets[j]._id == findedVideosets[t]._id){
+                        inArr=true;
+                        break;
+                    }
+                }
+                if(!inArr){
+                    findedVideosets.push(videosets[j])
+                }
+            }
+
+        }
+        res.status(200).send(findedVideosets)
+    }
+    catch (err) {
+        res.status(404).send(err)
+    }
+})
 
 module.exports = router

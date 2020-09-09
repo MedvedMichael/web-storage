@@ -27,6 +27,8 @@ const videosetSchema = new mongoose.Schema({
         required: true,
         ref: 'Subcategory'
     }
+},{
+    timestamps:true
 })
 
 videosetSchema.virtual('videos-containers', {

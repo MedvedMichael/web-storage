@@ -2,7 +2,11 @@ const mongoose = require('mongoose')
 const Video = require("./video");
 
 const videosContainerSchema = new mongoose.Schema({
-    
+    name: {
+        type: String,
+        required: true,
+        default: "Videos"
+    },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
